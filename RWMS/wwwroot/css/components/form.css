@@ -1,0 +1,139 @@
+/* =================================================================
+   COMPONENT — FORM
+   Shared form controls for ops and portal.
+   ================================================================= */
+
+/* ── Field group ──────────────────────────────────────────── */
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.field label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+}
+
+/* ── Fieldset (group of fields) ───────────────────────────── */
+
+.fieldset {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.fieldset--2col {
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+
+@media (max-width: 767.98px) {
+  .fieldset--2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Input, select, textarea ──────────────────────────────── */
+
+.input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.7rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 2px var(--color-focus);
+}
+
+textarea.input {
+  min-height: 140px;
+  resize: vertical;
+}
+
+select.input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23667085' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+/* ── Checkbox row ─────────────────────────────────────────── */
+
+.field--check {
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.field--check label {
+  font-weight: 400;
+  color: var(--color-text);
+}
+
+/* ── Toggle switch ────────────────────────────────────────── */
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggle__pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+  background-color: var(--gray-100);
+  color: var(--color-text-muted);
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+.toggle input:checked + .toggle__pill {
+  background-color: var(--green-100);
+  color: var(--green-700);
+}
+
+/* ── Search input with icon ───────────────────────────────── */
+
+.search {
+  position: relative;
+}
+
+.search .input {
+  padding-left: 2.5rem;
+}
+
+.search__icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}

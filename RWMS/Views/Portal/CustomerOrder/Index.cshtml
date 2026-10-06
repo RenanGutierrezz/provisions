@@ -1,0 +1,64 @@
+@model List<RWMS.Models.ViewModels.Portal.CustomerOrderSummaryViewModel>
+@{
+    ViewData["Title"] = "My Orders";
+    Layout = "~/Views/Shared/_PortalLayout.cshtml";
+}
+
+<div class="portal-page-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+    <div>
+        <h1 style="font-size:1.5rem;margin:0 0 0.25rem;">My Orders</h1>
+        <p style="color:var(--color-text-muted);font-size:0.9rem;margin:0;">@Model.Count order@(Model.Count == 1 ? "" : "s")</p>
+    </div>
+    <a asp-controller="CustomerOrder" asp-action="PlaceOrder" class="portal-btn">Place New Order</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="portal-card" style="text-align:center;padding:3rem;">
+        <p style="color:var(--color-text-muted);margin:0 0 1.5rem;">You have not placed any orders yet.</p>
+        <a asp-controller="CustomerOrder" asp-action="PlaceOrder" class="portal-btn">Place Your First Order</a>
+    </div>
+}
+else
+{
+    <div class="portal-table-wrap">
+    <table class="portal-table">
+        <thead>
+            <tr>
+                <th>Order</th>
+                <th>Placed</th>
+                <th>Delivery Date</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>#@order.Id</td>
+                    <td>@order.CreatedAt.ToString("MMM d, yyyy")</td>
+                    <td>@(order.RequestedDeliveryDate?.ToString("MMM d, yyyy") ?? "—")</td>
+                    <td>@order.ItemCount</td>
+                    <td>$@order.TotalAmount.ToString("F2")</td>
+                    <td>
+                        @{
+                            var badgeClass = order.Status switch
+                            {
+                                "Pending"           => "portal-badge-pending",
+                                "Accepted"          => "portal-badge-accepted",
+                                "ReadyForDelivery"  => "portal-badge-ready",
+                                "Rejected"          => "portal-badge-rejected",
+                                _                   => ""
+                            };
+                            var statusLabel = order.Status == "ReadyForDelivery" ? "Ready" : order.Status;
+                        }
+                        <span class="portal-badge @badgeClass">@statusLabel</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+}

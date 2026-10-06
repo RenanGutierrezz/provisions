@@ -1,0 +1,80 @@
+@model RWMS.Models.ViewModels.Product.ProductDetailViewModel
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="page rwms-product-detail-page o-stack">
+    <section class="card rwms-product-detail-hero">
+        <div class="rwms-product-detail-hero-copy">
+            <h2>@Model.Name</h2>
+            <p class="rwms-products-copy">Review pricing, stock, category information, and lifecycle details for this product.</p>
+        </div>
+        <div class="rwms-product-detail-hero-meta">
+            <span class="rwms-orders-status @(Model.IsActive ? "is-ready" : "is-rejected")">
+                @(Model.IsActive ? "Active" : "Inactive")
+            </span>
+        </div>
+    </section>
+
+    <section class="rwms-product-detail-grid">
+        <article class="card rwms-product-detail-card">
+            <div class="rwms-panel-header">
+                <div>
+                    <p class="rwms-section-kicker">Overview</p>
+                    <h3>Product Snapshot</h3>
+                </div>
+            </div>
+
+            <dl class="rwms-product-detail-list">
+                <div class="rwms-product-detail-description">
+                    <dt>Description</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(Model.Description) ? "No description has been added for this product yet." : Model.Description)</dd>
+                </div>
+                @if (User.IsInRole("Owner"))
+                {
+                <div>
+                    <dt>Price</dt>
+                    <dd>@Model.Price.ToString("C")</dd>
+                </div>
+                }
+                <div>
+                    <dt>Category</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(Model.Category) ? "-" : Model.Category)</dd>
+                </div>
+            </dl>
+        </article>
+
+        <article class="card rwms-product-detail-card">
+            <div class="rwms-panel-header">
+                <div>
+                    <p class="rwms-section-kicker">Activity</p>
+                    <h3>Timeline</h3>
+                </div>
+            </div>
+
+            <dl class="rwms-product-detail-list rwms-product-detail-list-single">
+                <div>
+                    <dt>Status</dt>
+                    <dd>@(Model.IsActive ? "Active" : "Inactive")</dd>
+                </div>
+                <div>
+                    <dt>Created</dt>
+                    <dd>@Model.CreatedAt.ToString("MMM dd, yyyy")</dd>
+                </div>
+                @if (Model.UpdatedAt.HasValue)
+                {
+                    <div>
+                        <dt>Last Updated</dt>
+                        <dd>@Model.UpdatedAt.Value.ToString("MMM dd, yyyy")</dd>
+                    </div>
+                }
+            </dl>
+        </article>
+    </section>
+
+    <section class="rwms-product-detail-actions">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn--primary">Edit Product</a>
+        <a asp-action="Index" class="btn btn--secondary">Back to Products</a>
+    </section>
+</div>

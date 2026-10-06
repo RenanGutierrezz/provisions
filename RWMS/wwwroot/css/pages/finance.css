@@ -1,0 +1,396 @@
+.rwms-finance-page {
+  width: min(100%, 1720px);
+}
+
+.rwms-finance-hero h2 {
+  margin: 0 0 0.9rem;
+  font-size: clamp(2rem, 2.6vw, 2.5rem);
+  line-height: 1.05;
+}
+
+.rwms-finance-toolbar {
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-5);
+}
+
+.rwms-finance-toolbar-form {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.rwms-finance-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.rwms-finance-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: var(--space-4);
+}
+
+.rwms-finance-stat {
+  display: grid;
+  gap: 0.7rem;
+  container-type: inline-size;
+  min-width: 0;
+}
+
+.rwms-finance-stat p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rwms-finance-stat strong {
+  color: var(--color-text);
+  font-size: clamp(1.35rem, 12cqi, 2.4rem);
+  line-height: 1.05;
+  white-space: nowrap;
+}
+
+.rwms-finance-stat span {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.rwms-finance-stat-profit strong {
+  color: var(--green-700);
+}
+
+.rwms-finance-stat-loss strong {
+  color: var(--red-700);
+}
+
+.rwms-finance-chart-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+.rwms-finance-chart-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+
+.rwms-finance-chart-card {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.rwms-finance-chart-card-wide {
+  min-width: 0;
+}
+
+.rwms-finance-chart-shell {
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.rwms-finance-chart-shell canvas {
+  max-width: 100%;
+}
+
+.rwms-finance-chart-shell-wide {
+  min-height: 300px;
+}
+
+.rwms-finance-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+.rwms-finance-table-card {
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+}
+
+.rwms-finance-table-card .rwms-panel-header {
+  margin-bottom: 0;
+}
+
+.rwms-finance-empty {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.rwms-finance-table {
+  display: grid;
+  gap: 0;
+}
+
+.rwms-finance-table-head,
+.rwms-finance-table-row {
+  display: grid;
+  gap: var(--space-4);
+  align-items: center;
+  padding: 1rem 1.1rem;
+}
+
+.rwms-finance-orders-head,
+.rwms-finance-orders-row {
+  grid-template-columns: 0.65fr 1fr 0.9fr 0.8fr;
+}
+
+.rwms-finance-customer-head,
+.rwms-finance-customer-row {
+  grid-template-columns: 2fr 0.6fr 1fr;
+}
+
+.rwms-finance-stat strong.rwms-finance-stat-name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: clamp(1.05rem, 7cqi, 1.5rem);
+  white-space: normal;
+}
+
+
+.rwms-finance-table-head {
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.rwms-finance-table-row + .rwms-finance-table-row {
+  border-top: 1px solid var(--color-border);
+}
+
+.rwms-finance-table-row span,
+.rwms-finance-table-row strong {
+  color: var(--color-text);
+}
+
+.rwms-finance-table-row strong {
+  font-weight: 800;
+}
+
+.rwms-products-cta {
+  min-width: 170px;
+}
+
+.rwms-products-cta,
+.rwms-products-cta:hover,
+.rwms-place-order-submit,
+.rwms-place-order-submit:hover,
+.rwms-contact-submit,
+.rwms-contact-submit:hover {
+  color: var(--color-text-inverse);
+  text-decoration: none;
+}
+
+.rwms-products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+.rwms-product-card {
+  display: grid;
+  gap: var(--space-5);
+  min-height: 220px;
+}
+
+.rwms-product-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.rwms-product-category {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rwms-product-card h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.rwms-product-price {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 92px;
+  padding: 0.55rem 0.85rem;
+  color: var(--green-700);
+  border-radius: var(--radius-pill);
+  background-color: rgba(31, 122, 54, 0.12);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.rwms-product-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.rwms-product-meta div {
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  background-color: var(--color-surface-muted);
+}
+
+.rwms-product-meta dt {
+  margin-bottom: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.rwms-product-meta dd {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.rwms-contact-page {
+  width: min(100%, 1920px);
+}
+
+.rwms-contact-shell {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--space-4);
+}
+
+.rwms-contact-card {
+  width: min(100%, 1280px);
+  padding: var(--space-2) 0 0;
+}
+
+.rwms-contact-intro {
+  margin: 0 0 var(--space-8);
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.rwms-contact-success,
+.rwms-contact-validation {
+  margin-bottom: var(--space-5);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+}
+
+.rwms-contact-success {
+  color: var(--green-700);
+  background-color: var(--green-100);
+  border: 1px solid rgba(36, 94, 47, 0.18);
+}
+
+.rwms-contact-validation {
+  color: var(--red-700);
+  background-color: var(--red-100);
+  border: 1px solid rgba(154, 40, 51, 0.16);
+}
+
+.rwms-contact-form {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.rwms-contact-field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.rwms-contact-field label {
+  color: var(--color-text);
+  padding-left: 1rem;
+  font-size: 1.18rem;
+  font-weight: 700;
+}
+
+.rwms-contact-input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0.95rem 1rem;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 20px;
+  background-color: var(--white);
+  font: inherit;
+}
+
+.rwms-contact-input:focus {
+  outline: none;
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 4px var(--color-focus);
+}
+
+.rwms-contact-textarea {
+  min-height: 220px;
+  resize: vertical;
+}
+
+.rwms-contact-error {
+  color: var(--red-700);
+  font-size: 0.9rem;
+}
+
+.rwms-contact-submit {
+  justify-self: start;
+  min-width: 170px;
+  background-color: var(--gray-950);
+  border-color: var(--gray-950);
+}
+
+.rwms-contact-submit:hover {
+  background-color: var(--gray-900);
+  border-color: var(--gray-900);
+}
+
+
+/* =========================
+   RESPONSIVE — TABLET (≤1024px)
+========================= */
+
+@media (max-width: 1024px) {
+  .rwms-finance-chart-grid,
+  .rwms-finance-chart-pair,
+  .rwms-finance-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rwms-finance-chart-shell {
+    min-height: 240px;
+  }
+
+  .rwms-finance-chart-shell-wide {
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .rwms-finance-chart-grid,
+  .rwms-finance-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

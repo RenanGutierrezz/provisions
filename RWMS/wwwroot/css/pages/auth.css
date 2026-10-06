@@ -1,0 +1,245 @@
+/* =========================
+   AUTH — centered single-column
+========================= */
+
+.rwms-auth-body {
+  min-height: 100vh;
+  background: var(--gray-50);
+}
+
+.rwms-auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+/* ── Brand ──────────────────────────────────────────────── */
+
+.rwms-auth-brand {
+  margin-bottom: var(--space-8);
+  text-align: center;
+}
+
+.rwms-auth-brand-name {
+  margin: 0;
+  font-family: var(--font-head);
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--brand-500);
+}
+
+.rwms-auth-brand-tagline {
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* ── Card ───────────────────────────────────────────────── */
+
+.rwms-auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 2.5rem 2.25rem 2rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.rwms-auth-card-register {
+  max-width: 480px;
+}
+
+/* ── Heading ────────────────────────────────────────────── */
+
+.rwms-auth-title {
+  margin: 0 0 var(--space-6);
+  font-family: var(--font-head);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+}
+
+/* ── Form ───────────────────────────────────────────────── */
+
+.rwms-auth-form {
+  width: 100%;
+}
+
+.rwms-field {
+  margin-bottom: 1.1rem;
+}
+
+.rwms-field label {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.rwms-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.rwms-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.rwms-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.rwms-input:focus {
+  outline: none;
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 3px var(--color-focus);
+}
+
+/* ── Remember me ────────────────────────────────────────── */
+
+.rwms-remember {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: var(--space-1);
+  margin-bottom: var(--space-6);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+
+/* ── Submit button ──────────────────────────────────────── */
+
+.rwms-auth-btn {
+  display: block;
+  width: 100%;
+  padding: 0.9rem 1.25rem;
+  margin-top: var(--space-4);
+  color: var(--color-text-inverse);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--brand-500);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.rwms-auth-btn:hover {
+  background: var(--brand-600);
+}
+
+.rwms-auth-btn:active {
+  transform: translateY(1px);
+}
+
+/* ── Links below form ───────────────────────────────────── */
+
+.rwms-auth-links {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rwms-auth-links a {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.rwms-auth-links a:hover {
+  color: var(--color-brand);
+  text-decoration: underline;
+}
+
+/* ── Divider ────────────────────────────────────────────── */
+
+.rwms-auth-divider {
+  width: 48px;
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* ── Register page link ─────────────────────────────────── */
+
+.rwms-auth-link {
+  margin-top: var(--space-6);
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.rwms-auth-link a {
+  color: var(--color-brand);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.rwms-auth-link a:hover {
+  text-decoration: underline;
+}
+
+/* ── Alert ──────────────────────────────────────────────── */
+
+.rwms-auth-alert {
+  padding: 0.75rem 1rem;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.rwms-auth-alert.is-error {
+  background: var(--red-100);
+  color: var(--red-700);
+}
+
+.rwms-auth-alert.is-info {
+  background: var(--brand-100);
+  color: var(--brand-700);
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .rwms-auth-wrapper {
+    padding: var(--space-4);
+  }
+
+  .rwms-auth-card {
+    padding: 2rem 1.5rem 1.5rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .rwms-auth-brand-name {
+    font-size: 2rem;
+  }
+
+  .rwms-field-row {
+    grid-template-columns: 1fr;
+  }
+}

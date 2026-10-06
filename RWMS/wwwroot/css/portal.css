@@ -1,0 +1,537 @@
+/* =================================================================
+   PORTAL — Customer-facing styles
+   Foundation (tokens, reset, elements, objects) and components are
+   loaded from their own files. This file contains portal-specific
+   nav, buttons, cards, forms, tables, and responsive rules.
+   ================================================================= */
+
+/* ─── Nav ───────────────────────────────────────────────────────────────── */
+.portal-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 64px;
+}
+
+.portal-nav-brand {
+    font-family: var(--font-head);
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--black);
+    text-decoration: none;
+}
+
+.portal-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.portal-nav-links a {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--black);
+    text-decoration: none;
+}
+
+.portal-nav-links a:hover {
+    text-decoration: underline;
+}
+
+.portal-nav-logout form {
+    margin: 0;
+}
+
+.portal-nav-logout button {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--black);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.portal-nav-logout button:hover {
+    text-decoration: underline;
+}
+
+/* ─── Main content ──────────────────────────────────────────────────────── */
+.portal-main {
+    min-height: calc(100vh - 64px - 80px);
+    padding: 3rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* ─── Footer ────────────────────────────────────────────────────────────── */
+.portal-footer {
+    background: var(--black);
+    color: var(--white);
+    text-align: center;
+    padding: 1.5rem 2rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+}
+
+/* ─── Headings ──────────────────────────────────────────────────────────── */
+.portal-body h1,
+.portal-body h2,
+.portal-body h3 {
+    font-family: var(--font-head);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 0;
+}
+
+/* ─── Buttons ───────────────────────────────────────────────────────────── */
+.portal-btn {
+    display: inline-block;
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 0.75rem 1.75rem;
+    border: 1px solid var(--black);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+}
+
+.portal-btn:hover {
+    background: var(--white);
+    color: var(--black);
+    text-decoration: none;
+}
+
+.portal-btn-outline {
+    background: var(--white);
+    color: var(--black);
+}
+
+.portal-btn-outline:hover {
+    background: var(--black);
+    color: var(--white);
+}
+
+/* ─── Cards ─────────────────────────────────────────────────────────────── */
+.portal-card {
+    border: 1px solid var(--black);
+    padding: 1.5rem;
+    background: var(--white);
+}
+
+.portal-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+/* ─── Forms ─────────────────────────────────────────────────────────────── */
+.portal-form-group {
+    margin-bottom: 1.25rem;
+}
+
+.portal-form-group label {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.4rem;
+}
+
+.portal-form-group input,
+.portal-form-group select,
+.portal-form-group textarea {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--black);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    background: var(--white);
+    color: var(--black);
+    outline: none;
+}
+
+.portal-form-group input:focus,
+.portal-form-group select:focus,
+.portal-form-group textarea:focus {
+    border-color: var(--black);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.15);
+}
+
+/* ─── Alerts ────────────────────────────────────────────────────────────── */
+.portal-alert {
+    padding: 0.85rem 1.25rem;
+    border: 1px solid var(--black);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.portal-alert-error {
+    border-color: var(--black);
+    background: var(--gray-50);
+}
+
+/* ─── Tables ────────────────────────────────────────────────────────────── */
+.portal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+}
+
+.portal-table th {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    border-bottom: 2px solid var(--black);
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+}
+
+.portal-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+/* ─── Status badges ─────────────────────────────────────────────────────── */
+.portal-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: 1px solid var(--black);
+}
+
+.portal-badge-pending  { color: var(--status-pending-text);  background: var(--status-pending-bg); }
+.portal-badge-accepted { color: var(--status-accepted-text); background: var(--status-accepted-bg); }
+.portal-badge-ready    { color: var(--status-ready-text);    background: var(--status-ready-bg); }
+.portal-badge-rejected { color: var(--status-rejected-text); background: var(--status-rejected-bg); }
+
+/* ─── Hamburger button (hidden on desktop) ──────────────────────────────── */
+.portal-nav-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.portal-nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--black);
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+/* ─── Mobile nav drawer ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .portal-nav {
+        padding: 0 1rem;
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 64px;
+    }
+
+    .portal-nav-hamburger {
+        display: flex;
+    }
+
+    .portal-nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        width: 100%;
+        border-top: 1px solid var(--gray-200);
+        padding: 0.75rem 0 1rem;
+    }
+
+    .portal-nav-links.is-open {
+        display: flex;
+    }
+
+    .portal-nav-links li {
+        width: 100%;
+    }
+
+    .portal-nav-links a,
+    .portal-nav-logout button {
+        display: block;
+        padding: 0.65rem 0;
+        width: 100%;
+    }
+
+    .portal-main {
+        padding: 1.5rem 1rem;
+    }
+
+    /* Orders table — horizontal scroll on small screens */
+    .portal-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Place order item rows — narrower on mobile */
+    .order-item-row {
+        grid-template-columns: 1fr 80px 36px !important;
+    }
+
+    /* Product card grid — allow smaller cards on mobile */
+    .portal-card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Catalog search bar — stack inputs vertically */
+    .portal-search-bar {
+        flex-direction: column;
+    }
+
+    .portal-search-bar input,
+    .portal-search-bar select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* Page header — stack title and action button */
+    .portal-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* Buttons — full width on mobile */
+    .portal-page-header .portal-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Table font size — slightly smaller */
+    .portal-table {
+        font-size: 0.825rem;
+    }
+
+    .portal-table th,
+    .portal-table td {
+        padding: 0.5rem;
+    }
+}
+
+/* ─── Very small phones (≤ 400px) ──────────────────────────────────────── */
+@media (max-width: 400px) {
+    .portal-main {
+        padding: 1rem 0.75rem;
+    }
+
+    .portal-card {
+        padding: 1rem;
+    }
+
+    .portal-btn {
+        padding: 0.65rem 1.25rem;
+        font-size: 0.8rem;
+    }
+
+    /* Place order items — stack product and qty vertically */
+    .order-item-row {
+        grid-template-columns: 1fr 36px !important;
+    }
+
+    .order-item-row select,
+    .order-item-row input[type="number"] {
+        grid-column: 1;
+    }
+}
+
+
+/* =================================================================
+   PORTAL — PRODUCT CATALOGUE
+   ================================================================= */
+
+.portal-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-8);
+}
+
+.portal-page-header h1 {
+  margin: 0 0 var(--space-2);
+  font-size: 1.5rem;
+}
+
+.portal-page-header p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.portal-search-bar {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-8);
+}
+
+.portal-search-bar input[type="text"] {
+  flex: 1;
+  min-width: 200px;
+}
+
+.portal-search-bar input[type="text"],
+.portal-search-bar select {
+  min-height: 44px;
+  padding: 0.65rem 0.75rem;
+  color: var(--black);
+  border: 1px solid var(--black);
+  border-radius: 0;
+  background-color: var(--white);
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+
+.portal-search-bar input[type="text"]:focus,
+.portal-search-bar select:focus {
+  outline: 2px solid var(--black);
+  outline-offset: -2px;
+}
+
+.portal-product-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--black);
+  background-color: var(--white);
+  transition: box-shadow var(--transition-fast);
+}
+
+.portal-product-card:hover {
+  box-shadow: 6px 6px 0 var(--black);
+}
+
+/* the art well doubles as the typographic panel for products with no render */
+.portal-product-art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-bottom: 1px solid var(--black);
+  background-color: var(--color-surface-muted);
+}
+
+.portal-product-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.portal-product-art-text {
+  color: var(--color-text-muted);
+  font-family: var(--font-head);
+  font-size: clamp(1.4rem, 5cqi, 2rem);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: var(--space-4);
+}
+
+.portal-product-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--space-2);
+  padding: var(--space-5);
+}
+
+.portal-product-category {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.portal-product-body h2 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.portal-product-desc {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.portal-product-meta {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.portal-product-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.portal-product-price {
+  font-family: var(--font-head);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.portal-empty {
+  margin: 0;
+  padding: var(--space-8);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  text-align: center;
+}

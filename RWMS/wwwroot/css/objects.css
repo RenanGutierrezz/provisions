@@ -1,0 +1,52 @@
+/* =================================================================
+   OBJECTS
+   Layout primitives — structural patterns with no decoration.
+   ================================================================= */
+
+/* Vertical stack with consistent gap */
+.o-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.o-stack > * + * {
+  margin-top: var(--space-6);
+}
+
+/* Responsive grid */
+.o-grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.o-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.o-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.o-grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+@media (max-width: 1279.98px) {
+  .o-grid--3, .o-grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 767.98px) {
+  .o-grid--2, .o-grid--3, .o-grid--4 { grid-template-columns: 1fr; }
+}
+
+/* Horizontal row with wrapping */
+.o-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+/* Page section with max-width */
+.o-page {
+  width: 100%;
+  max-width: var(--content-max);
+}
+
+/* Scrollable table wrapper */
+.o-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}

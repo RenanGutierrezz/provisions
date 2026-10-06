@@ -1,0 +1,43 @@
+@model RWMS.Models.ViewModels.Invite.SendInviteViewModel
+
+@{
+    ViewData["Title"] = "Send an Invitation";
+}
+
+<div class="page rwms-invite-page o-stack">
+    <section class="rwms-contact-card rwms-invite-card">
+        <div class="rwms-contact-header">
+            <p class="rwms-contact-intro">Send a secure registration link. Customers get portal access; Managers get internal operations access.</p>
+        </div>
+
+        @if (TempData["Success"] is string msg)
+        {
+            <div class="rwms-contact-success">@msg</div>
+        }
+
+        <form asp-action="SendInvite" method="post" class="rwms-contact-form rwms-invite-form">
+            <div asp-validation-summary="ModelOnly" class="rwms-validation-summary"></div>
+
+            <label class="rwms-contact-field">
+                <span>Email</span>
+                <input asp-for="Email" class="rwms-contact-input" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </label>
+
+            <label class="rwms-contact-field">
+                <span>Role</span>
+                <select asp-for="Role" class="rwms-contact-input rwms-invite-select">
+                    <option value="Customer">Customer (Wholesale Portal)</option>
+                    <option value="Manager">Manager (Internal Operations)</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </label>
+
+            <button type="submit" class="btn btn--primary rwms-invite-submit">Send Invite</button>
+        </form>
+    </section>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

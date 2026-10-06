@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Request Submitted";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="rwms-auth-brand">
+    <h1 class="rwms-auth-brand-name">RWMS</h1>
+    <p class="rwms-auth-brand-tagline">Restaurant Wholesale Management</p>
+</div>
+
+<div class="rwms-auth-card rwms-request-submitted">
+    <div class="rwms-request-submitted-icon">
+        <i class="ti ti-circle-check"></i>
+    </div>
+    <h2 class="rwms-auth-title">Request Submitted</h2>
+    <p class="rwms-auth-subtitle">Thank you for your interest. Our team will review your request and you'll receive an email once your account is ready.</p>
+
+    <div class="rwms-auth-links">
+        <a asp-controller="Account" asp-action="Login">Back to Login</a>
+    </div>
+</div>

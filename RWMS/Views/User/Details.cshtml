@@ -1,0 +1,193 @@
+@model RWMS.Models.ViewModels.User.UserDetailViewModel
+@using RWMS.Models.Enums
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="page rwms-product-detail-page o-stack">
+    <section class="card rwms-product-detail-hero">
+        <div class="rwms-product-detail-hero-copy">
+            <h2>@Model.Name</h2>
+            @if (!string.IsNullOrWhiteSpace(Model.CompanyName))
+            {
+                <p class="rwms-products-copy">@Model.CompanyName</p>
+            }
+        </div>
+        <div class="rwms-product-detail-hero-meta">
+            <span class="rwms-orders-status is-neutral">@Model.Role</span>
+            <span class="rwms-orders-status @(Model.IsActive ? "is-ready" : "is-rejected")">
+                @(Model.IsActive ? "Active" : "Inactive")
+            </span>
+        </div>
+    </section>
+
+    <section class="rwms-product-detail-grid">
+        <article class="card rwms-product-detail-card">
+            <div class="rwms-panel-header">
+                <div>
+                    <p class="rwms-section-kicker">Contact</p>
+                    <h3>Account Info</h3>
+                </div>
+            </div>
+
+            <dl class="rwms-product-detail-list">
+                <div>
+                    <dt>Email</dt>
+                    <dd>@Model.Email</dd>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(Model.Phone))
+                {
+                    <div>
+                        <dt>Phone</dt>
+                        <dd>@Model.Phone</dd>
+                    </div>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Address))
+                {
+                    <div>
+                        <dt>Address</dt>
+                        <dd>@Model.Address</dd>
+                    </div>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Notes))
+                {
+                    <div class="rwms-product-detail-description">
+                        <dt>Notes</dt>
+                        <dd>@Model.Notes</dd>
+                    </div>
+                }
+            </dl>
+        </article>
+
+        <article class="card rwms-product-detail-card">
+            <div class="rwms-panel-header">
+                <div>
+                    <p class="rwms-section-kicker">Activity</p>
+                    <h3>Summary</h3>
+                </div>
+            </div>
+
+            <dl class="rwms-product-detail-list">
+                <div>
+                    <dt>Joined</dt>
+                    <dd>@Model.CreatedAt.ToString("MMMM d, yyyy")</dd>
+                </div>
+                <div>
+                    <dt>Total Orders</dt>
+                    <dd>@Model.TotalOrderCount</dd>
+                </div>
+                @if (User.IsInRole("Owner") && Model.Role == "Customer")
+                {
+                    <div>
+                        <dt>Total Spent</dt>
+                        <dd>@Model.TotalSpent.ToString("C")</dd>
+                    </div>
+                }
+            </dl>
+        </article>
+    </section>
+
+    @if (Model.OrderGuide.Any())
+    {
+        <section class="card">
+            <div class="rwms-panel-header">
+                <div>
+                    <p class="rwms-section-kicker">Catalog</p>
+                    <h3>Order Guide</h3>
+                </div>
+            </div>
+
+            <div class="rwms-order-details-table" style="margin-top: var(--space-5);">
+                <div class="rwms-order-details-table-row rwms-order-details-table-head">
+                    <span>Product</span>
+                    <span>Category</span>
+                    @if (User.IsInRole("Owner"))
+                    {
+                        <span>Price</span>
+                    }
+                    <span>Par Level</span>
+                    <span>Last Ordered</span>
+                </div>
+
+                @foreach (var item in Model.OrderGuide)
+                {
+                    <div class="rwms-order-details-table-row">
+                        <span>@item.Name @(!string.IsNullOrWhiteSpace(item.Unit) ? $"({item.Unit})" : "")</span>
+                        <span>@(item.Category ?? "—")</span>
+                        @if (User.IsInRole("Owner"))
+                        {
+                            <span>@item.Price.ToString("C")</span>
+                        }
+                        <span>@(item.ParLevel?.ToString() ?? "—")</span>
+                        <span>@(item.LastOrderedAt?.ToString("MMM d, yyyy") ?? "Never")</span>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
+    @if (Model.RecentOrders.Any())
+    {
+        <section class="card">
+            <div class="rwms-panel-header">
+                <div>
+                    <p class="rwms-section-kicker">History</p>
+                    <h3>Recent Orders</h3>
+                </div>
+            </div>
+
+            <div class="rwms-order-details-table" style="margin-top: var(--space-5);">
+                <div class="rwms-order-details-table-row rwms-order-details-table-head">
+                    <span>Order</span>
+                    <span>Delivery</span>
+                    @if (User.IsInRole("Owner"))
+                    {
+                        <span>Amount</span>
+                    }
+                    <span>Status</span>
+                </div>
+
+                @foreach (var order in Model.RecentOrders)
+                {
+                    <div class="rwms-order-details-table-row">
+                        <span>
+                            <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id" class="rwms-order-details-link">
+                                #@order.Id — @order.CreatedAt.ToString("MMM d")
+                            </a>
+                        </span>
+                        <span>@(order.RequestedDeliveryDate?.ToString("MMM d, dddd") ?? "Not set")</span>
+                        @if (User.IsInRole("Owner"))
+                        {
+                            <span>@order.TotalAmount.ToString("C")</span>
+                        }
+                        <span>
+                            <span class="rwms-orders-status @StatusClass(order.Status)">@StatusLabel(order.Status)</span>
+                        </span>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
+    <div class="rwms-order-details-back">
+        <a asp-action="Index" class="btn btn--secondary">Back to Accounts</a>
+    </div>
+</div>
+
+@functions {
+    static string StatusClass(OrderStatus s) => s switch
+    {
+        OrderStatus.Pending => "is-pending",
+        OrderStatus.Accepted => "is-accepted",
+        OrderStatus.ReadyForDelivery => "is-ready",
+        OrderStatus.Rejected => "is-rejected",
+        _ => "is-neutral"
+    };
+
+    static string StatusLabel(OrderStatus s) => s switch
+    {
+        OrderStatus.ReadyForDelivery => "Ready For Delivery",
+        _ => s.ToString()
+    };
+}

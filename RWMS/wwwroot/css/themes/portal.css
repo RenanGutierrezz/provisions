@@ -1,0 +1,192 @@
+/* =================================================================
+   THEME — PORTAL
+   Customer-facing layout: topbar nav + centered content + footer.
+   Uses shared component classes from /components/*.css.
+   Scoped to .theme-portal on <body>.
+   ================================================================= */
+
+/* ── Body ─────────────────────────────────────────────────── */
+
+.theme-portal {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--black);
+  background: var(--white);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Headings ─────────────────────────────────────────────── */
+
+.theme-portal h1,
+.theme-portal h2,
+.theme-portal h3 {
+  font-family: var(--font-head);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 0;
+}
+
+/* ── Topbar nav ───────────────────────────────────────────── */
+
+.theme-portal .portal-topbar {
+  border-bottom-color: var(--black);
+}
+
+.theme-portal .portal-topbar__brand {
+  color: var(--black);
+}
+
+.theme-portal .portal-topbar__links a {
+  color: var(--black);
+}
+
+.theme-portal .portal-topbar__links a:hover {
+  text-decoration: underline;
+  color: var(--black);
+}
+
+.theme-portal .portal-topbar__links button {
+  color: var(--black);
+}
+
+.theme-portal .portal-topbar__links button:hover {
+  text-decoration: underline;
+}
+
+/* ── Main content area ────────────────────────────────────── */
+
+.theme-portal .portal-main {
+  min-height: calc(100vh - 64px - 80px);
+  padding: 3rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ── Footer ───────────────────────────────────────────────── */
+
+.theme-portal .portal-footer {
+  background: var(--black);
+  color: var(--white);
+  text-align: center;
+  padding: var(--space-6) var(--space-8);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+/* ── Portal buttons — black/white style ───────────────────── */
+
+.theme-portal .btn--primary {
+  background-color: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  border-radius: 0;
+}
+
+.theme-portal .btn--primary:hover {
+  background-color: var(--white);
+  color: var(--black);
+}
+
+.theme-portal .btn--secondary {
+  background-color: var(--white);
+  color: var(--black);
+  border-color: var(--black);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  border-radius: 0;
+}
+
+.theme-portal .btn--secondary:hover {
+  background-color: var(--black);
+  color: var(--white);
+}
+
+/* ── Portal cards — sharp corners, black border ───────────── */
+
+.theme-portal .card {
+  border-color: var(--black);
+  border-radius: 0;
+}
+
+/* ── Portal forms — black border, no radius ───────────────── */
+
+.theme-portal .input {
+  border-color: var(--black);
+  border-radius: 0;
+}
+
+.theme-portal .input:focus {
+  border-color: var(--black);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Portal tables — black header border ──────────────────── */
+
+.theme-portal .tbl th {
+  border-bottom-color: var(--black);
+}
+
+/* ── Portal badges — bordered, monochrome ─────────────────── */
+
+.theme-portal .badge {
+  border: 1px solid var(--black);
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+}
+
+.theme-portal .badge--pending {
+  background: var(--gray-50);
+  color: var(--black);
+}
+
+.theme-portal .badge--accepted,
+.theme-portal .badge--ready {
+  background: var(--black);
+  color: var(--white);
+}
+
+.theme-portal .badge--rejected {
+  background: var(--gray-200);
+  color: var(--black);
+}
+
+/* ── Portal alerts ────────────────────────────────────────── */
+
+.theme-portal .alert {
+  border-color: var(--black);
+  border-radius: 0;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤ 768px)
+   ═════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .theme-portal .portal-main {
+    padding: 1.5rem 1rem;
+  }
+
+  .theme-portal .portal-topbar__links a,
+  .theme-portal .portal-topbar__links button {
+    display: block;
+    padding: var(--space-3) 0;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+@media (max-width: 400px) {
+  .theme-portal .portal-main {
+    padding: 1rem 0.75rem;
+  }
+
+  .theme-portal .card {
+    padding: var(--space-4);
+  }
+}

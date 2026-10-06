@@ -1,0 +1,78 @@
+@model RWMS.Models.ViewModels.Supply.EditSupplyViewModel
+
+@{
+    ViewData["Title"] = "Edit Supply Item";
+}
+
+<div class="page rwms-supply-edit-page o-stack">
+    <section class="card rwms-supply-edit-hero">
+        <div>
+            <h2>Edit Item</h2>
+            <p class="rwms-supply-copy">Update the item details.</p>
+        </div>
+    </section>
+
+    <section class="card rwms-supply-edit-card">
+        <form asp-action="Edit" method="post" class="rwms-supply-edit-form">
+            <div asp-validation-summary="ModelOnly" class="rwms-validation-summary"></div>
+
+            <div class="rwms-supply-edit-grid">
+                <label class="rwms-contact-field">
+                    <span>Name</span>
+                    <input asp-for="Name" class="rwms-contact-input" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </label>
+
+                <label class="rwms-contact-field">
+                    <span>Category</span>
+                    <input asp-for="Category" class="rwms-contact-input" list="supply-categories" placeholder="e.g. Produce, Dairy, Protein" />
+                    <datalist id="supply-categories">
+                        <option value="Produce" />
+                        <option value="Dairy" />
+                        <option value="Protein" />
+                        <option value="Dry Goods" />
+                        <option value="Beverages" />
+                        <option value="Cleaning" />
+                        <option value="Packaging" />
+                        <option value="Other" />
+                    </datalist>
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </label>
+
+                <label class="rwms-contact-field">
+                    <span>Unit</span>
+                    <input asp-for="Unit" class="rwms-contact-input" placeholder="e.g. kg, box, case"
+                           pattern="[^0-9]+" title="Unit must contain letters, not just numbers" />
+                    <span asp-validation-for="Unit" class="text-danger"></span>
+                </label>
+
+                <label class="rwms-contact-field">
+                    <span>Quantity Needed</span>
+                    <input asp-for="QuantityNeeded" class="rwms-contact-input" min="1" />
+                    <span asp-validation-for="QuantityNeeded" class="text-danger"></span>
+                </label>
+
+                <label class="rwms-contact-field">
+                    <span>Cost per Unit <span class="rwms-field-optional">(optional)</span></span>
+                    <input asp-for="UnitCost" class="rwms-contact-input" step="0.01" min="0.01" placeholder="0.00" />
+                    <span asp-validation-for="UnitCost" class="text-danger"></span>
+                </label>
+            </div>
+
+            <label class="rwms-contact-field rwms-supply-edit-notes">
+                <span>Notes</span>
+                <textarea asp-for="Notes" class="rwms-contact-textarea" rows="5"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </label>
+
+            <div class="rwms-supply-detail-actions">
+                <button type="submit" class="btn btn--primary">Save Changes</button>
+                <a asp-action="Index" class="btn btn--secondary">Cancel</a>
+            </div>
+        </form>
+    </section>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

@@ -1,0 +1,87 @@
+/* =================================================================
+   COMPONENT — TABLE
+   Shared table styles for ops and portal.
+   ================================================================= */
+
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.tbl th {
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.tbl td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.tbl tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tbl tbody tr:hover {
+  background-color: var(--color-surface-muted);
+}
+
+/* ── Table inside a card (flush edges) ────────────────────── */
+
+.tbl--card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.tbl--card th {
+  background-color: var(--color-surface-muted);
+}
+
+/* ── Grid-based table rows (for custom column layouts) ────── */
+
+.tbl-grid {
+  display: grid;
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.tbl-grid__head,
+.tbl-grid__row {
+  display: grid;
+  align-items: center;
+  padding: var(--space-3) var(--space-5);
+  gap: var(--space-3);
+}
+
+.tbl-grid__head {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  background-color: var(--color-surface-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tbl-grid__row {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tbl-grid__row:last-child {
+  border-bottom: none;
+}
+
+.tbl-grid__row:hover {
+  background-color: var(--color-surface-muted);
+}

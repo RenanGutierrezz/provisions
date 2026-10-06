@@ -1,0 +1,139 @@
+@model RWMS.Models.ViewModels.Product.ProductListPageViewModel
+
+@{
+    ViewData["Title"] = "Products";
+    const int pageSize = 5;
+    var requestedPage = 1;
+    if (!int.TryParse(Context.Request.Query["page"], out requestedPage) || requestedPage < 1)
+    {
+        requestedPage = 1;
+    }
+
+    var totalProducts = Model.Products.Count;
+    var totalPages = Math.Max(1, (int)Math.Ceiling(totalProducts / (double)pageSize));
+    var currentPage = Math.Min(requestedPage, totalPages);
+    var pagedProducts = Model.Products
+        .Skip((currentPage - 1) * pageSize)
+        .Take(pageSize)
+        .ToList();
+
+    string PageUrl(int page) => Url.Action("Index", new
+    {
+        search = Model.Search,
+        category = Model.Category,
+        status = Model.Status,
+        page
+    }) ?? "#";
+}
+
+<div class="page rwms-restaurant-products-page o-stack">
+    <section class="rwms-restaurant-products-hero">
+        <p class="rwms-restaurant-products-copy">Manage pricing, stock levels, and product availability.</p>
+        <a asp-action="Create" class="btn btn--primary rwms-restaurant-products-cta">Add Product</a>
+    </section>
+
+    <section class="card rwms-products-toolbar">
+        <form method="get" class="rwms-products-toolbar-form">
+            <label class="rwms-orders-search" aria-label="Search products">
+                <span class="rwms-orders-search-icon" aria-hidden="true">Q</span>
+                <input type="search" name="search" value="@Model.Search" placeholder="Search by name..." />
+            </label>
+
+            <select name="category" class="rwms-supply-select" aria-label="Filter by category">
+                <option value="" selected="@(string.IsNullOrWhiteSpace(Model.Category))">All Categories</option>
+                @foreach (var cat in Model.Categories)
+                {
+                    <option value="@cat" selected="@(Model.Category == cat)">@cat</option>
+                }
+            </select>
+
+            <select name="status" class="rwms-supply-select" aria-label="Filter by status">
+                <option value="" selected="@(string.IsNullOrWhiteSpace(Model.Status))">All Statuses</option>
+                <option value="active" selected="@(Model.Status == "active")">Active</option>
+                <option value="inactive" selected="@(Model.Status == "inactive")">Inactive</option>
+            </select>
+
+            <div class="rwms-products-toolbar-actions">
+                <button type="submit" class="btn btn--secondary">Filter</button>
+                <a asp-action="Index" class="btn btn--secondary">Clear</a>
+            </div>
+        </form>
+    </section>
+
+    @if (!Model.Products.Any())
+    {
+        <section class="empty-state card">
+            @if (!string.IsNullOrWhiteSpace(Model.Search) || !string.IsNullOrWhiteSpace(Model.Category) || !string.IsNullOrWhiteSpace(Model.Status))
+            {
+                <span>No products match your search.</span>
+            }
+            else
+            {
+                <span>No products found.</span>
+            }
+        </section>
+    }
+    else
+    {
+        <section class="card rwms-restaurant-products-list @(User.IsInRole("Owner") ? "" : "is-manager")">
+            <div class="rwms-restaurant-products-head">
+                <span>Name</span>
+                @if (User.IsInRole("Owner")) { <span>Price</span> }
+                <span>Unit</span>
+                <span>Category</span>
+                <span>Status</span>
+                <span>Actions</span>
+            </div>
+
+            @foreach (var product in pagedProducts)
+            {
+                <article class="rwms-restaurant-product-row">
+                    <div class="rwms-restaurant-product-primary">
+                        <strong>@product.Name</strong>
+                    </div>
+                    @if (User.IsInRole("Owner")) { <span>@product.Price.ToString("C")</span> }
+                    <span>@product.Unit</span>
+                    <span>@(string.IsNullOrWhiteSpace(product.Category) ? "Uncategorized" : product.Category)</span>
+                    <span class="rwms-orders-status @(product.IsActive ? "is-ready" : "is-rejected")">
+                        @(product.IsActive ? "Active" : "Inactive")
+                    </span>
+                    <div class="rwms-restaurant-product-actions">
+                        <a asp-action="Details" asp-route-id="@product.Id" class="btn btn--secondary">Details</a>
+                        <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn--secondary">Edit</a>
+                        @if (product.IsActive)
+                        {
+                            <form asp-action="Deactivate" asp-route-id="@product.Id" method="post">
+                                <button type="submit" class="btn btn--danger" onclick="return confirm('Deactivate this product?')">Deactivate</button>
+                            </form>
+                        }
+                    </div>
+                </article>
+            }
+        </section>
+
+        @if (totalProducts > pageSize)
+        {
+            <section class="rwms-orders-pagination card">
+                @if (currentPage > 1)
+                {
+                    <a href="@PageUrl(currentPage - 1)" class="btn btn--secondary">Previous</a>
+                }
+                else
+                {
+                    <button type="button" class="btn btn--secondary" disabled>Previous</button>
+                }
+
+                <span>Page @currentPage of @totalPages</span>
+
+                @if (currentPage < totalPages)
+                {
+                    <a href="@PageUrl(currentPage + 1)" class="btn btn--secondary">Next</a>
+                }
+                else
+                {
+                    <button type="button" class="btn btn--secondary" disabled>Next</button>
+                }
+            </section>
+        }
+    }
+</div>

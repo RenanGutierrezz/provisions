@@ -1,0 +1,65 @@
+/* =================================================================
+   COMPONENT — BADGE
+   Status badges and tags for ops and portal.
+   ================================================================= */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.3;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+/* ── Status variants ──────────────────────────────────────── */
+
+.badge--pending {
+  background-color: var(--status-pending-bg);
+  color: var(--status-pending-text);
+}
+
+.badge--accepted {
+  background-color: var(--status-accepted-bg);
+  color: var(--status-accepted-text);
+}
+
+.badge--ready {
+  background-color: var(--status-ready-bg);
+  color: var(--status-ready-text);
+}
+
+.badge--rejected {
+  background-color: var(--status-rejected-bg);
+  color: var(--status-rejected-text);
+}
+
+/* ── Semantic variants ────────────────────────────────────── */
+
+.badge--success {
+  background-color: var(--green-100);
+  color: var(--green-700);
+}
+
+.badge--warning {
+  background-color: var(--amber-100);
+  color: var(--amber-700);
+}
+
+.badge--danger {
+  background-color: var(--red-100);
+  color: var(--red-700);
+}
+
+.badge--neutral {
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+}
+
+.badge--brand {
+  background-color: var(--brand-50);
+  color: var(--brand-700);
+}

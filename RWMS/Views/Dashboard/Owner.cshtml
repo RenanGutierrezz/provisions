@@ -1,0 +1,214 @@
+@using RWMS.Models.Enums
+@model RWMS.Models.ViewModels.Finance.OwnerDashboardViewModel
+
+@{
+    ViewData["Title"] = "Overview";
+
+    var isOwner = User.IsInRole("Owner");
+    var showRequests = isOwner && Model.PendingAccountRequests > 0;
+    var attention = Model.PendingOrders + (showRequests ? Model.PendingAccountRequests : 0);
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/overview.css" asp-append-version="true" />
+}
+
+<div class="page rwms-overview-page o-stack">
+
+    <section class="rwms-overview-head">
+        <div>
+            <h2>@Greeting(Model.UserFirstName)</h2>
+            <p>@DateTime.Now.ToString("dddd, d MMMM yyyy")</p>
+        </div>
+        <a asp-controller="Order" asp-action="Create" class="btn btn--primary">New Order</a>
+    </section>
+
+    @if (attention > 0)
+    {
+        <section class="rwms-overview-attention">
+            <p class="rwms-overview-attention-label">Needs attention</p>
+            <div class="rwms-overview-attention-items">
+                @if (Model.PendingOrders > 0)
+                {
+                    <a asp-controller="Order" asp-action="Index" class="rwms-overview-attention-item">
+                        <strong>@Model.PendingOrders</strong>
+                        <span>order@(Model.PendingOrders == 1 ? "" : "s") awaiting review</span>
+                    </a>
+                }
+                @if (showRequests)
+                {
+                    <a asp-controller="AccountRequest" asp-action="Index" class="rwms-overview-attention-item">
+                        <strong>@Model.PendingAccountRequests</strong>
+                        <span>account request@(Model.PendingAccountRequests == 1 ? "" : "s") to review</span>
+                    </a>
+                }
+            </div>
+        </section>
+    }
+
+    <section class="rwms-overview-stats">
+        <a asp-controller="Order" asp-action="Index" class="rwms-overview-stat">
+            <p>Pending</p>
+            <strong>@Model.PendingOrders</strong>
+            <span>orders to review</span>
+        </a>
+        <a asp-controller="Order" asp-action="Index" class="rwms-overview-stat">
+            <p>Accepted</p>
+            <strong>@Model.AcceptedOrders</strong>
+            <span>in preparation</span>
+        </a>
+        <a asp-controller="Delivery" asp-action="Index" class="rwms-overview-stat">
+            <p>Ready</p>
+            <strong>@Model.OrdersReadyForDelivery</strong>
+            <span>for delivery</span>
+        </a>
+        <a asp-controller="Supply" asp-action="Index" class="rwms-overview-stat">
+            <p>Supply</p>
+            <strong>@Model.SupplyItemsOnList</strong>
+            <span>items on the list</span>
+        </a>
+        <a asp-controller="User" asp-action="Index" class="rwms-overview-stat">
+            <p>Customers</p>
+            <strong>@Model.TotalCustomers</strong>
+            <span>active accounts</span>
+        </a>
+    </section>
+
+    <section class="rwms-overview-grid @(isOwner ? "" : "is-single")">
+        @if (isOwner)
+        {
+            <article class="rwms-overview-panel rwms-overview-revenue">
+                <div class="rwms-overview-panel-head">
+                    <h3>Gross Revenue</h3>
+                    <a asp-controller="Finance" asp-action="Index">Full report</a>
+                </div>
+
+                <div class="rwms-overview-revenue-figure">
+                    <strong>@Model.GrossRevenue.ToString("C")</strong>
+                    <span class="rwms-overview-revenue-scope">all time</span>
+                    @if (Model.RevenueChangePercent != 0)
+                    {
+                        <span class="rwms-overview-delta @(Model.RevenueChangePercent >= 0 ? "is-up" : "is-down")">
+                            @(Model.RevenueChangePercent >= 0 ? "▲" : "▼") @Math.Abs(Model.RevenueChangePercent)% vs last month
+                        </span>
+                    }
+                </div>
+
+                @if (Model.MonthlyRevenue.Any(m => m.Revenue > 0))
+                {
+                    <div>
+                        <p class="rwms-overview-chart-label">Last 6 months</p>
+                        <div class="rwms-overview-chart">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p class="rwms-overview-empty">No revenue recorded in the last six months.</p>
+                }
+            </article>
+        }
+
+        <article class="rwms-overview-panel">
+            <div class="rwms-overview-panel-head">
+                <h3>Upcoming Deliveries</h3>
+                <a asp-controller="Delivery" asp-action="Index">All deliveries</a>
+            </div>
+
+            @if (!Model.UpcomingDeliveries.Any())
+            {
+                <p class="rwms-overview-empty">Nothing scheduled. Orders appear here once they have a delivery date.</p>
+            }
+            else
+            {
+                <ul class="rwms-overview-deliveries">
+                    @foreach (var delivery in Model.UpcomingDeliveries)
+                    {
+                        <li>
+                            <a asp-controller="Order" asp-action="Details" asp-route-id="@delivery.OrderId">
+                                <span class="rwms-overview-delivery-date">
+                                    <strong>@delivery.RequestedDeliveryDate.ToString("dd")</strong>
+                                    @delivery.RequestedDeliveryDate.ToString("MMM")
+                                </span>
+                                <span class="rwms-overview-delivery-main">
+                                    <strong>@delivery.CustomerName</strong>
+                                    Order #@delivery.OrderId
+                                </span>
+                                <span class="rwms-orders-status @StatusClass(delivery.Status)">@StatusLabel(delivery.Status)</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        </article>
+    </section>
+</div>
+
+@section Scripts {
+    @if (isOwner && Model.MonthlyRevenue.Any(m => m.Revenue > 0))
+    {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@@4.4.0/dist/chart.umd.min.js"></script>
+        <script>
+            const css = getComputedStyle(document.documentElement);
+            new Chart(document.getElementById('revenueChart'), {
+                type: 'bar',
+                data: {
+                    labels: [@Html.Raw(string.Join(",", Model.MonthlyRevenue.Select(m => $"\"{m.Month}\"")))],
+                    datasets: [{
+                        data: [@Html.Raw(string.Join(",", Model.MonthlyRevenue.Select(m => m.Revenue)))],
+                        backgroundColor: css.getPropertyValue('--black').trim(),
+                        hoverBackgroundColor: css.getPropertyValue('--gray-700').trim(),
+                        borderRadius: 0,
+                        borderSkipped: false,
+                        maxBarThickness: 56
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => ctx.parsed.y.toLocaleString(undefined, { style: 'currency', currency: 'USD' })
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, border: { display: false } },
+                        y: {
+                            beginAtZero: true,
+                            border: { display: false },
+                            grid: { color: css.getPropertyValue('--color-border').trim() },
+                            ticks: { callback: v => '$' + v.toLocaleString() }
+                        }
+                    }
+                }
+            });
+        </script>
+    }
+}
+
+@functions {
+    static string Greeting(string name)
+    {
+        var hour = DateTime.Now.Hour;
+        var part = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+        return string.IsNullOrWhiteSpace(name) ? part : $"{part}, {name}";
+    }
+
+    static string StatusClass(OrderStatus status) => status switch
+    {
+        OrderStatus.Pending => "is-pending",
+        OrderStatus.Accepted => "is-accepted",
+        OrderStatus.ReadyForDelivery => "is-ready",
+        _ => "is-neutral"
+    };
+
+    static string StatusLabel(OrderStatus status) => status switch
+    {
+        OrderStatus.ReadyForDelivery => "Ready",
+        _ => status.ToString()
+    };
+}

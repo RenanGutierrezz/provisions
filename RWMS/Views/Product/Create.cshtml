@@ -1,0 +1,61 @@
+@model RWMS.Models.ViewModels.Product.CreateProductViewModel
+
+@{
+    ViewData["Title"] = "Add Product";
+}
+
+<div class="page rwms-product-form-page o-stack">
+    <section class="card rwms-product-form-hero">
+        <div>
+            <h2>Add a New Product</h2>
+            <p class="rwms-products-copy">Create a new wholesale product with pricing, stock, and category details for restaurant clients.</p>
+        </div>
+    </section>
+
+    <section class="card rwms-product-form-card">
+        <form asp-action="Create" method="post" class="rwms-product-form">
+            <div asp-validation-summary="ModelOnly" class="rwms-validation-summary"></div>
+
+            <label class="rwms-contact-field">
+                <span>Name</span>
+                <input asp-for="Name" class="rwms-contact-input" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </label>
+
+            <label class="rwms-contact-field rwms-product-form-description">
+                <span>Description</span>
+                <textarea asp-for="Description" class="rwms-contact-textarea" rows="5"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </label>
+
+            <div class="rwms-product-form-grid">
+                <label class="rwms-contact-field">
+                    <span>Price</span>
+                    <input asp-for="Price" class="rwms-contact-input" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </label>
+
+                <label class="rwms-contact-field">
+                    <span>Unit</span>
+                    <input asp-for="Unit" class="rwms-contact-input" placeholder="e.g. kg, box, case" />
+                    <span asp-validation-for="Unit" class="text-danger"></span>
+                </label>
+
+                <label class="rwms-contact-field">
+                    <span>Category</span>
+                    <input asp-for="Category" class="rwms-contact-input" placeholder="e.g. Produce, Dairy" />
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </label>
+            </div>
+
+            <div class="rwms-product-detail-actions">
+                <button type="submit" class="btn btn--primary">Save Product</button>
+                <a asp-action="Index" class="btn btn--secondary">Cancel</a>
+            </div>
+        </form>
+    </section>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

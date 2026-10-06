@@ -1,0 +1,166 @@
+@model RWMS.Models.ViewModels.Order.CreateOrderViewModel
+
+@{
+    ViewData["Title"] = "Create Order";
+}
+
+<div class="page o-stack">
+    <section class="card rwms-product-form-hero">
+        <div>
+            <h2>Create Order</h2>
+            <p class="rwms-products-copy">Manually enter an order for a customer.</p>
+        </div>
+    </section>
+
+    <section class="card rwms-product-form-card">
+        <form asp-action="Create" method="post" class="rwms-product-form" id="createOrderForm">
+            <div asp-validation-summary="ModelOnly" class="rwms-validation-summary"></div>
+
+            <div class="rwms-product-form-grid">
+                <label class="rwms-contact-field">
+                    <span>Customer</span>
+                    <select asp-for="CustomerId" class="rwms-supply-select">
+                        <option value="">— Select customer —</option>
+                        @foreach (var c in Model.Customers)
+                        {
+                            <option value="@c.Id">@c.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="CustomerId" class="text-danger"></span>
+                </label>
+
+                <label class="rwms-contact-field">
+                    <span>Requested Delivery Date</span>
+                    <input asp-for="RequestedDeliveryDate" type="date" class="rwms-contact-input" />
+                    <span asp-validation-for="RequestedDeliveryDate" class="text-danger"></span>
+                </label>
+            </div>
+
+            <label class="rwms-contact-field">
+                <span>Notes</span>
+                <textarea asp-for="Notes" class="rwms-contact-textarea" rows="2" placeholder="Any special instructions..."></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </label>
+
+            <div class="rwms-order-items-section">
+                <div class="rwms-order-items-header">
+                    <h3>Items</h3>
+                    <button type="button" class="btn btn--secondary" id="addItemBtn">+ Add Item</button>
+                </div>
+
+                <div id="itemsContainer">
+                    @for (var i = 0; i < Model.Items.Count; i++)
+                    {
+                        <div class="rwms-order-item-row" data-index="@i">
+                            <select name="Items[@i].ProductId" class="rwms-supply-select rwms-order-item-product">
+                                <option value="0">— Select product —</option>
+                                @foreach (var p in Model.Products)
+                                {
+                                    <option value="@p.Id" data-price="@p.Price" data-unit="@p.Unit">
+                                        @p.Name (@p.Unit)@(User.IsInRole("Owner") ? $" — {p.Price.ToString("C")}" : "")
+                                    </option>
+                                }
+                            </select>
+                            <input type="number" name="Items[@i].Quantity" value="@Model.Items[i].Quantity"
+                                   min="1" max="10000" class="rwms-contact-input rwms-order-item-qty" placeholder="Qty" />
+                            <button type="button" class="btn btn--danger rwms-order-item-remove">Remove</button>
+                        </div>
+                    }
+                </div>
+
+                @if (User.IsInRole("Owner"))
+                {
+                <div class="rwms-order-total-preview">
+                    Total: <strong id="orderTotal">$0.00</strong>
+                </div>
+                }
+            </div>
+
+            <div class="rwms-product-detail-actions">
+                <button type="submit" class="btn btn--primary">Create Order</button>
+                <a asp-action="Index" class="btn btn--secondary">Cancel</a>
+            </div>
+        </form>
+    </section>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script>
+        const products = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            Model.Products.ToDictionary(p => p.Id, p => new { price = p.Price, unit = p.Unit })
+        ));
+
+        const container = document.getElementById('itemsContainer');
+
+        function getIndex() {
+            return container.querySelectorAll('.rwms-order-item-row').length;
+        }
+
+        function buildRow(index) {
+            const div = document.createElement('div');
+            div.className = 'rwms-order-item-row';
+            div.dataset.index = index;
+
+            const options = Object.entries(products)
+                .map(([id, p]) => `<option value="${id}" data-price="${p.price}" data-unit="${p.unit}">— Select product —</option>`)
+                .join('');
+
+            div.innerHTML = `
+                <select name="Items[${index}].ProductId" class="rwms-supply-select rwms-order-item-product">
+                    <option value="0">— Select product —</option>
+                    @foreach (var p in Model.Products)
+                    {
+                        <text><option value="@p.Id" data-price="@p.Price" data-unit="@p.Unit">@p.Name (@p.Unit)@(User.IsInRole("Owner") ? $" — {p.Price.ToString("C")}" : "")</option></text>
+                    }
+                </select>
+                <input type="number" name="Items[${index}].Quantity" value="1"
+                       min="1" max="10000" class="rwms-contact-input rwms-order-item-qty" placeholder="Qty" />
+                <button type="button" class="btn btn--danger rwms-order-item-remove">Remove</button>
+            `;
+            return div;
+        }
+
+        document.getElementById('addItemBtn').addEventListener('click', () => {
+            const row = buildRow(getIndex());
+            container.appendChild(row);
+            bindRow(row);
+            recalcTotal();
+        });
+
+        function bindRow(row) {
+            row.querySelector('.rwms-order-item-remove').addEventListener('click', () => {
+                if (container.querySelectorAll('.rwms-order-item-row').length > 1) {
+                    row.remove();
+                    reindex();
+                    recalcTotal();
+                }
+            });
+            row.querySelector('.rwms-order-item-product').addEventListener('change', recalcTotal);
+            row.querySelector('.rwms-order-item-qty').addEventListener('input', recalcTotal);
+        }
+
+        function reindex() {
+            container.querySelectorAll('.rwms-order-item-row').forEach((row, i) => {
+                row.querySelector('select').name = `Items[${i}].ProductId`;
+                row.querySelector('input').name = `Items[${i}].Quantity`;
+                row.dataset.index = i;
+            });
+        }
+
+        function recalcTotal() {
+            let total = 0;
+            container.querySelectorAll('.rwms-order-item-row').forEach(row => {
+                const select = row.querySelector('.rwms-order-item-product');
+                const qty = parseInt(row.querySelector('.rwms-order-item-qty').value) || 0;
+                const selected = select.options[select.selectedIndex];
+                const price = parseFloat(selected?.dataset?.price) || 0;
+                total += price * qty;
+            });
+            document.getElementById('orderTotal').textContent = total.toLocaleString('en-CA', { style: 'currency', currency: 'CAD' });
+        }
+
+        container.querySelectorAll('.rwms-order-item-row').forEach(bindRow);
+        recalcTotal();
+    </script>
+}

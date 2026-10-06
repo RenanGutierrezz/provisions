@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Account Setup Required";
+    Layout = "~/Views/Shared/_PortalLayout.cshtml";
+}
+
+<div class="portal-card" style="max-width:560px;text-align:center;padding:3rem;margin:0 auto;">
+    <h1 style="font-size:1.25rem;margin:0 0 1rem;">Account Not Linked</h1>
+    <p style="color:var(--color-text-muted);margin:0 0 1.5rem;">
+        Your account has not been linked to a wholesale customer profile yet.
+        Please contact your account manager to get set up.
+    </p>
+    <a asp-controller="Catalog" asp-action="Index" class="portal-btn">Browse Products</a>
+</div>

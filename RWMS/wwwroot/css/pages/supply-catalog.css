@@ -1,0 +1,254 @@
+/* =================================================================
+   PAGE — SUPPLY CATALOG
+   Loaded by Views/Supply/Catalog.cshtml via its own Styles section.
+   ================================================================= */
+
+.rwms-catalog-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  padding: var(--space-5);
+  border: 1px solid var(--black);
+  background-color: var(--color-surface);
+}
+
+.rwms-catalog-search {
+  position: relative;
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.rwms-catalog-search i {
+  position: absolute;
+  top: 50%;
+  left: 0.85rem;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.rwms-catalog-search input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.6rem 0.9rem 0.6rem 2.4rem;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0;
+  background-color: var(--white);
+  font: inherit;
+}
+
+.rwms-catalog-search input:focus {
+  outline: none;
+  border-color: var(--black);
+}
+
+.rwms-catalog-filters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.rwms-catalog-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 36px;
+  padding: 0.35rem 0.8rem;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+  background-color: transparent;
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+.rwms-catalog-filter:hover {
+  border-color: var(--black);
+}
+
+.rwms-catalog-filter.is-active {
+  color: var(--white);
+  border-color: var(--black);
+  background-color: var(--black);
+}
+
+.rwms-catalog-filter span {
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+}
+
+.rwms-catalog-filter.is-active span {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.rwms-catalog-section-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--black);
+}
+
+.rwms-catalog-section-name {
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.rwms-catalog-section-count {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rwms-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: var(--space-4);
+}
+
+.rwms-catalog-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--black);
+  background-color: var(--color-surface);
+  transition: box-shadow var(--transition-fast);
+}
+
+.rwms-catalog-card:hover {
+  box-shadow: 4px 4px 0 var(--black);
+}
+
+.rwms-catalog-card-eyebrow {
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rwms-catalog-card h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.rwms-catalog-card-last {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-muted);
+}
+
+.rwms-catalog-card-last dt {
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.rwms-catalog-card-last dd {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.rwms-catalog-readd {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.rwms-catalog-qty {
+  width: 72px;
+  flex-shrink: 0;
+  min-height: 40px;
+  padding: 0.4rem 0.5rem;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0;
+  background-color: var(--white);
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+}
+
+.rwms-catalog-qty:focus {
+  outline: none;
+  border-color: var(--black);
+}
+
+.rwms-catalog-readd .btn {
+  flex: 1;
+  min-height: 40px;
+}
+
+.rwms-catalog-card-foot {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.rwms-catalog-delete {
+  padding: 0;
+  color: var(--color-text-muted);
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.rwms-catalog-delete:hover {
+  color: var(--red-700);
+}
+
+.rwms-catalog-noresults {
+  padding: var(--space-8);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* the cards and sections are flex containers, which would otherwise
+   win over the hidden attribute's UA display:none */
+.rwms-catalog-card[hidden],
+.rwms-catalog-section[hidden],
+.rwms-catalog-noresults[hidden] {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .rwms-catalog-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

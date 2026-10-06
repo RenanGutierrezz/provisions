@@ -1,0 +1,273 @@
+@model RWMS.Models.ViewModels.Order.OrderListPageViewModel
+@using RWMS.Models.Enums
+
+@{
+    ViewData["Title"] = "Orders";
+    const int pageSize = 5;
+    var requestedPage = 1;
+    if (!int.TryParse(Context.Request.Query["page"], out requestedPage) || requestedPage < 1)
+    {
+        requestedPage = 1;
+    }
+
+    var totalOrders = Model.Orders.Count;
+    var totalPages = Math.Max(1, (int)Math.Ceiling(totalOrders / (double)pageSize));
+    var currentPage = Math.Min(requestedPage, totalPages);
+    var pagedOrders = Model.Orders
+        .Skip((currentPage - 1) * pageSize)
+        .Take(pageSize)
+        .ToList();
+
+    var prevDate = Model.Date.AddDays(-1);
+    var nextDate = Model.Date.AddDays(1);
+    var isToday = Model.Date.Date == DateTime.Today;
+
+    string DayUrl(DateTime d, string? search = null, string? filter = null) => Url.Action("Index", new
+    {
+        date = d.ToString("yyyy-MM-dd"),
+        search,
+        filter
+    }) ?? "#";
+
+    string PageUrl(int page) => Url.Action("Index", new
+    {
+        date = Model.Date.ToString("yyyy-MM-dd"),
+        search = Model.Search,
+        filter = Model.Filter,
+        page
+    }) ?? "#";
+
+    string TabUrl(string? filter) => Url.Action("Index", new
+    {
+        date = Model.Date.ToString("yyyy-MM-dd"),
+        search = Model.Search,
+        filter
+    }) ?? "#";
+}
+
+<div class="page rwms-orders-page o-stack">
+
+    <!-- Date Navigator -->
+    <section class="rwms-date-nav card">
+        <a href="@DayUrl(prevDate, Model.Search, Model.Filter)" class="rwms-date-nav-arrow" aria-label="Previous day">
+            <i class="ti ti-chevron-left"></i>
+        </a>
+
+        <div class="rwms-date-nav-center">
+            <label class="rwms-date-nav-picker">
+                <h1 class="rwms-date-nav-title">@Model.Date.ToString("dddd, MMMM d")</h1>
+                <i class="ti ti-calendar-event rwms-date-nav-cal-icon"></i>
+                <input type="date" id="dateNavPicker" value="@Model.Date.ToString("yyyy-MM-dd")" class="rwms-date-nav-input" />
+            </label>
+            @if (isToday)
+            {
+                <span class="rwms-date-nav-badge">Today</span>
+            }
+            else
+            {
+                <a href="@DayUrl(DateTime.Today, Model.Search, Model.Filter)" class="rwms-date-nav-today-link">Today</a>
+            }
+        </div>
+
+        <a href="@DayUrl(nextDate, Model.Search, Model.Filter)" class="rwms-date-nav-arrow" aria-label="Next day">
+            <i class="ti ti-chevron-right"></i>
+        </a>
+    </section>
+
+    <!-- Toolbar: status tabs + search + actions -->
+    <section class="rwms-orders-toolbar card">
+        <div class="rwms-orders-toolbar-top">
+            <nav class="rwms-orders-tabs">
+                <a href="@TabUrl(null)" class="rwms-orders-tab @(string.IsNullOrWhiteSpace(Model.Filter) ? "is-active" : "")">
+                    All <span class="rwms-orders-tab-count is-all">@Model.TotalCount</span>
+                </a>
+                <a href="@TabUrl("Pending")" class="rwms-orders-tab @(Model.Filter == "Pending" ? "is-active" : "")">
+                    Pending <span class="rwms-orders-tab-count is-pending">@Model.PendingCount</span>
+                </a>
+                <a href="@TabUrl("Accepted")" class="rwms-orders-tab @(Model.Filter == "Accepted" ? "is-active" : "")">
+                    Accepted <span class="rwms-orders-tab-count is-accepted">@Model.AcceptedCount</span>
+                </a>
+                <a href="@TabUrl("ReadyForDelivery")" class="rwms-orders-tab @(Model.Filter == "ReadyForDelivery" ? "is-active" : "")">
+                    Ready <span class="rwms-orders-tab-count is-ready">@Model.ReadyCount</span>
+                </a>
+                <a href="@TabUrl("Rejected")" class="rwms-orders-tab @(Model.Filter == "Rejected" ? "is-active" : "")">
+                    Rejected <span class="rwms-orders-tab-count is-rejected">@Model.RejectedCount</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="rwms-orders-toolbar-bottom">
+            <form method="get" class="rwms-orders-toolbar-form">
+                <input type="hidden" name="date" value="@Model.Date.ToString("yyyy-MM-dd")" />
+                <input type="hidden" name="filter" value="@Model.Filter" />
+                <label class="rwms-orders-search" aria-label="Search orders">
+                    <span class="rwms-orders-search-icon" aria-hidden="true">Q</span>
+                    <input type="search" name="search" value="@Model.Search" placeholder="Search by order # or customer..." />
+                </label>
+                <div class="rwms-orders-toolbar-actions">
+                    <button type="submit" class="btn btn--secondary">Search</button>
+                    @if (!string.IsNullOrWhiteSpace(Model.Search))
+                    {
+                        <a href="@TabUrl(Model.Filter)" class="btn btn--secondary">Clear</a>
+                    }
+                </div>
+            </form>
+
+            <div class="rwms-orders-toolbar-right">
+                <div class="rwms-orders-daysheet">
+                    <a href="/Order/DownloadDaySheet?date=@Model.Date.ToString("yyyy-MM-dd")" class="btn btn--secondary">
+                        <i class="ti ti-file-download"></i> Day Sheet
+                    </a>
+                </div>
+                <a asp-action="Create" class="btn btn--primary">New Order</a>
+            </div>
+        </div>
+
+        @if (!Model.Orders.Any())
+        {
+            <div class="empty-state rwms-orders-empty">
+                @if (!string.IsNullOrWhiteSpace(Model.Search) || !string.IsNullOrWhiteSpace(Model.Filter))
+                {
+                    <span>No orders match your search.</span>
+                }
+                else
+                {
+                    <span>No orders scheduled for @Model.Date.ToString("MMMM d").</span>
+                }
+            </div>
+        }
+    </section>
+
+    @if (Model.Orders.Any())
+    {
+        <section class="rwms-orders-list o-stack">
+            @foreach (var order in pagedOrders)
+            {
+                <article class="rwms-order-card card">
+                    <div class="rwms-order-card-header">
+                        <h3>Order #@order.Id</h3>
+                    </div>
+
+                    <div class="rwms-order-card-body">
+                        <div class="rwms-order-summary">
+                            <div class="rwms-order-summary-row rwms-order-summary-head @(User.IsInRole("Owner") ? "rwms-order-summary-head-owner" : "rwms-order-summary-head-manager")">
+                                <span>Created</span>
+                                <span>Customer</span>
+                                <span>Delivery</span>
+                                @if (User.IsInRole("Owner")) { <span>Cost</span> }
+                            </div>
+
+                            <div class="rwms-order-summary-row rwms-order-summary-values @(User.IsInRole("Owner") ? "rwms-order-summary-values-owner" : "rwms-order-summary-values-manager")">
+                                <div>
+                                    <strong>@order.CreatedAt.ToString("dd MMM")</strong>
+                                    <span>@order.CreatedAt.ToString("HH:mm")</span>
+                                </div>
+                                <div>
+                                    <strong>@order.CustomerName</strong>
+                                </div>
+                                <div>
+                                    <strong>@(order.RequestedDeliveryDate?.ToString("dd MMM, dddd") ?? "Not set")</strong>
+                                </div>
+                                @if (User.IsInRole("Owner"))
+                                {
+                                    <div>
+                                        <strong>@order.TotalAmount.ToString("C")</strong>
+                                    </div>
+                                }
+                            </div>
+
+                            @if (order.ItemSummaries.Any())
+                            {
+                                <div class="rwms-order-items-summary">
+                                    <ul class="rwms-order-items-placeholder">
+                                        @foreach (var item in order.ItemSummaries)
+                                        {
+                                            <li>@item</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+
+                            <div class="rwms-order-card-footer">
+                                <div class="rwms-order-status-line">
+                                    <span>Status:</span>
+                                    <span class="rwms-orders-status @StatusClass(order.Status)">@StatusLabel(order.Status)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rwms-order-actions rwms-order-actions-details">
+                            @if (order.Status == OrderStatus.Pending)
+                            {
+                                <form method="post" asp-action="UpdateStatus" class="rwms-order-quick-accept">
+                                    <input type="hidden" name="id" value="@order.Id" />
+                                    <input type="hidden" name="newStatus" value="@((int)OrderStatus.Accepted)" />
+                                    <input type="hidden" name="returnTo" value="index" />
+                                    <button type="submit" class="btn btn--primary">Accept</button>
+                                </form>
+                            }
+                            <a asp-action="Details" asp-route-id="@order.Id" class="rwms-order-details-link rwms-order-details-button">View Details</a>
+                        </div>
+                    </div>
+                </article>
+            }
+        </section>
+
+        @if (totalOrders > pageSize)
+        {
+            <section class="rwms-orders-pagination card">
+                @if (currentPage > 1)
+                {
+                    <a href="@PageUrl(currentPage - 1)" class="btn btn--secondary">Previous</a>
+                }
+                else
+                {
+                    <button type="button" class="btn btn--secondary" disabled>Previous</button>
+                }
+
+                <span>Page @currentPage of @totalPages</span>
+
+                @if (currentPage < totalPages)
+                {
+                    <a href="@PageUrl(currentPage + 1)" class="btn btn--secondary">Next</a>
+                }
+                else
+                {
+                    <button type="button" class="btn btn--secondary" disabled>Next</button>
+                }
+            </section>
+        }
+    }
+</div>
+
+@section Scripts {
+    <script>
+    (function () {
+        var picker = document.getElementById('dateNavPicker');
+        if (!picker) return;
+        picker.addEventListener('change', function () {
+            var url = new URL(window.location);
+            url.searchParams.set('date', picker.value);
+            url.searchParams.delete('page');
+            window.location.href = url.toString();
+        });
+    })();
+    </script>
+}
+
+@functions {
+    static string StatusClass(OrderStatus status) => status switch
+    {
+        OrderStatus.Pending => "is-pending",
+        OrderStatus.Accepted => "is-accepted",
+        OrderStatus.ReadyForDelivery => "is-ready",
+        OrderStatus.Rejected => "is-rejected",
+        _ => "is-neutral"
+    };
+
+    static string StatusLabel(OrderStatus status) => status switch
+    {
+        OrderStatus.ReadyForDelivery => "Ready For Delivery",
+        _ => status.ToString()
+    };
+}

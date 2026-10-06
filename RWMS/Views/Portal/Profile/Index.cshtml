@@ -1,0 +1,78 @@
+@model RWMS.Models.ViewModels.Profile.ProfilePageViewModel
+@{
+    ViewData["Title"] = "My Account";
+    Layout = "~/Views/Shared/_PortalLayout.cshtml";
+}
+
+<div style="max-width:640px;">
+    <div style="margin-bottom:2rem;">
+        <h1 style="font-size:1.5rem;margin:0 0 0.25rem;">My Account</h1>
+        <p style="color:var(--color-text-muted);font-size:0.9rem;margin:0;">@Model.Email</p>
+    </div>
+
+    @if (TempData["Success"] is string msg)
+    {
+        <div class="portal-alert" style="margin-bottom:1.5rem;">@msg</div>
+    }
+
+    <div class="portal-card" style="margin-bottom:1.5rem;">
+        <p style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 1.25rem;">Profile</p>
+        <form asp-controller="Profile" asp-action="UpdateProfile" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="portal-alert portal-alert-error" style="display:@(ViewData.ModelState.ErrorCount > 0 ? "block" : "none");margin-bottom:1rem;"></div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.75rem;margin-bottom:0.75rem;">
+                <div class="portal-form-group" style="margin:0;">
+                    <label>First Name</label>
+                    <input asp-for="Profile.FirstName" />
+                    <span asp-validation-for="Profile.FirstName" style="color:var(--red-700);font-size:0.8rem;"></span>
+                </div>
+                <div class="portal-form-group" style="margin:0;">
+                    <label>Last Name</label>
+                    <input asp-for="Profile.LastName" />
+                    <span asp-validation-for="Profile.LastName" style="color:var(--red-700);font-size:0.8rem;"></span>
+                </div>
+            </div>
+
+            <div class="portal-form-group">
+                <label>Email</label>
+                <input asp-for="Profile.Email" type="email" />
+                <span asp-validation-for="Profile.Email" style="color:var(--red-700);font-size:0.8rem;"></span>
+            </div>
+
+            <button type="submit" class="portal-btn">Save Changes</button>
+        </form>
+    </div>
+
+    <div class="portal-card">
+        <p style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 1.25rem;">Change Password</p>
+        <form asp-controller="Profile" asp-action="ChangePassword" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="portal-alert portal-alert-error" style="display:@(ViewData.ModelState.ErrorCount > 0 ? "block" : "none");margin-bottom:1rem;"></div>
+
+            <div class="portal-form-group">
+                <label>Current Password</label>
+                <input asp-for="Password.CurrentPassword" type="password" />
+                <span asp-validation-for="Password.CurrentPassword" style="color:var(--red-700);font-size:0.8rem;"></span>
+            </div>
+
+            <div class="portal-form-group">
+                <label>New Password</label>
+                <input asp-for="Password.NewPassword" type="password" />
+                <span asp-validation-for="Password.NewPassword" style="color:var(--red-700);font-size:0.8rem;"></span>
+            </div>
+
+            <div class="portal-form-group">
+                <label>Confirm New Password</label>
+                <input asp-for="Password.ConfirmNewPassword" type="password" />
+                <span asp-validation-for="Password.ConfirmNewPassword" style="color:var(--red-700);font-size:0.8rem;"></span>
+            </div>
+
+            <button type="submit" class="portal-btn">Change Password</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RWMS</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/css/tokens.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/reset.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/elements.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/objects.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/button.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/card.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/badge.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/table.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/form.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/alert.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/nav.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@3.x/dist/tabler-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RWMS.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/auth.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/dashboard.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/orders.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/restaurant.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/supply.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/products.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/finance.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/accounts.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/themes/ops.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="theme-ops">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="sidebar__brand">
+                <a asp-controller="Home" asp-action="Index" class="sidebar__brand-link">RWMS</a>
+            </div>
+
+            <nav class="sidebar__nav">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    var ctrl = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+
+                    @if (User.IsInRole("Owner") || User.IsInRole("Manager"))
+                    {
+                        <div class="sidebar__group">
+                            <span class="sidebar__group-label">Operations</span>
+                            <a class="sidebar__link @(ctrl == "Dashboard" ? "is-active" : "")" asp-controller="Dashboard" asp-action="Owner">
+                                <i class="ti ti-layout-dashboard"></i><span>Overview</span>
+                            </a>
+                            <a class="sidebar__link @(ctrl == "Order" ? "is-active" : "")" asp-controller="Order" asp-action="Index">
+                                <i class="ti ti-file-invoice"></i><span>Orders</span>
+                            </a>
+                            <a class="sidebar__link @(ctrl == "Delivery" ? "is-active" : "")" asp-controller="Delivery" asp-action="Index">
+                                <i class="ti ti-truck"></i><span>Deliveries</span>
+                            </a>
+                        </div>
+                        <div class="sidebar__group">
+                            <span class="sidebar__group-label">Catalog</span>
+                            <a class="sidebar__link @(ctrl == "Product" ? "is-active" : "")" asp-controller="Product" asp-action="Index">
+                                <i class="ti ti-package"></i><span>Products</span>
+                            </a>
+                            <a class="sidebar__link @(ctrl == "Supply" ? "is-active" : "")" asp-controller="Supply" asp-action="Index">
+                                <i class="ti ti-clipboard-list"></i><span>Supply</span>
+                            </a>
+                        </div>
+                    }
+
+                    @if (User.IsInRole("Owner"))
+                    {
+                        <div class="sidebar__group">
+                            <span class="sidebar__group-label">Owner</span>
+                            <a class="sidebar__link @(ctrl == "Finance" ? "is-active" : "")" asp-controller="Finance" asp-action="Index">
+                                <i class="ti ti-chart-bar"></i><span>Finance</span>
+                            </a>
+                            <a class="sidebar__link @(ctrl == "User" ? "is-active" : "")" asp-controller="User" asp-action="Index">
+                                <i class="ti ti-users-group"></i><span>Accounts</span>
+                            </a>
+                            <a class="sidebar__link @(ctrl == "AccountRequest" ? "is-active" : "")" asp-controller="AccountRequest" asp-action="Index">
+                                <i class="ti ti-inbox"></i><span>Requests</span>
+                            </a>
+                            <a class="sidebar__link @(ctrl == "Invite" ? "is-active" : "")" asp-controller="Invite" asp-action="SendInvite">
+                                <i class="ti ti-mail-forward"></i><span>Send Invite</span>
+                            </a>
+                        </div>
+                    }
+                }
+            </nav>
+
+            <div class="sidebar__footer">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a class="sidebar__user @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" ? "is-active" : "")" asp-controller="Profile" asp-action="Index">
+                        <i class="ti ti-user-circle"></i><span>@User.Identity.Name</span>
+                    </a>
+
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        <button type="submit" class="sidebar__logout">
+                            Log Out
+                        </button>
+                    </form>
+                }
+            </div>
+        </aside>
+
+        <div class="app-main">
+            <header class="topbar">
+                <button class="burger" type="button" aria-label="Toggle sidebar">
+                    <span class="burger__icon"></span>
+                </button>
+                <h1 class="topbar__title">@ViewData["Title"]</h1>
+            </header>
+
+            <main class="app-content">
+                @RenderBody()
+            </main>
+        </div>
+        <div class="sidebar-backdrop"></div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

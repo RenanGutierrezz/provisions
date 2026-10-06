@@ -1,0 +1,187 @@
+@model RWMS.Models.ViewModels.Order.OrderDetailViewModel
+@using RWMS.Models.Enums
+
+@{
+    ViewData["Title"] = "Order Details";
+    var isPending = Model.Status == OrderStatus.Pending;
+    var hasPendingItems = Model.Items.Any(i => i.Status == OrderItemStatus.Pending);
+    var isOwner = User.IsInRole("Owner");
+}
+
+<div class="page rwms-orders-page rwms-order-details-page o-stack">
+    <section class="card rwms-order-details-hero">
+        <div class="rwms-order-details-hero-content">
+            <div>
+                <h2>Order #@Model.Id</h2>
+                <p class="rwms-order-details-meta">Placed @Model.CreatedAt.ToString("MMM d, yyyy h:mm tt")</p>
+            </div>
+            <div class="rwms-order-details-hero-actions">
+                <span class="rwms-orders-status @StatusClass(Model.Status)">@StatusLabel(Model.Status)</span>
+                <a asp-action="DownloadInvoice" asp-route-id="@Model.Id" class="btn btn--secondary btn--sm">
+                    <i class="ti ti-file-invoice"></i> Invoice PDF
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="rwms-order-details-grid">
+        <article class="card rwms-order-details-card">
+            <h3>Customer</h3>
+            <dl class="rwms-order-details-list">
+                <div>
+                    <dt>Name</dt>
+                    <dd>@Model.CustomerName</dd>
+                </div>
+                <div>
+                    <dt>Email</dt>
+                    <dd>@(!string.IsNullOrWhiteSpace(Model.CustomerEmail) ? Model.CustomerEmail : "—")</dd>
+                </div>
+            </dl>
+        </article>
+
+        <article class="card rwms-order-details-card">
+            <h3>Order Info</h3>
+            <dl class="rwms-order-details-list">
+                <div>
+                    <dt>Delivery Date</dt>
+                    <dd>@(Model.RequestedDeliveryDate?.ToString("MMM d, yyyy") ?? "Not specified")</dd>
+                </div>
+                <div>
+                    <dt>Last Updated</dt>
+                    <dd>@(Model.UpdatedAt?.ToString("MMM d, yyyy h:mm tt") ?? "Not updated")</dd>
+                </div>
+                <div class="rwms-order-details-notes">
+                    <dt>Notes</dt>
+                    <dd>@(!string.IsNullOrWhiteSpace(Model.Notes) ? Model.Notes : "No notes provided.")</dd>
+                </div>
+            </dl>
+        </article>
+    </section>
+
+    <section class="card rwms-order-details-items">
+        <div class="rwms-order-details-section-header">
+            <h3>Items</h3>
+            @if (isOwner)
+            {
+                <span class="rwms-order-details-total">Total: @Model.TotalAmount.ToString("C")</span>
+            }
+        </div>
+
+        <div class="rwms-order-details-table rwms-order-items-table">
+            <div class="rwms-order-details-table-row rwms-order-details-table-head rwms-order-items-row">
+                <span>Product</span>
+                <span>Qty</span>
+                @if (isOwner)
+                {
+                    <span>Unit Price</span>
+                    <span>Subtotal</span>
+                }
+                <span>Status</span>
+                @if (isPending && hasPendingItems)
+                {
+                    <span>Actions</span>
+                }
+            </div>
+
+            @foreach (var item in Model.Items)
+            {
+                <div class="rwms-order-details-table-row rwms-order-items-row @(item.Status == OrderItemStatus.Rejected ? "rwms-item-rejected" : "")">
+                    <span>@item.ProductName</span>
+                    <span>@item.Quantity</span>
+                    @if (isOwner)
+                    {
+                        <span>@item.UnitPrice.ToString("C")</span>
+                        <span>@item.Subtotal.ToString("C")</span>
+                    }
+                    <span>
+                        <span class="rwms-orders-status @ItemStatusClass(item.Status)">@item.Status</span>
+                    </span>
+                    @if (isPending && hasPendingItems)
+                    {
+                        <span class="rwms-item-actions">
+                            @if (item.Status == OrderItemStatus.Pending)
+                            {
+                                <form asp-action="UpdateItemStatus" method="post">
+                                    <input type="hidden" name="orderId" value="@Model.Id" />
+                                    <input type="hidden" name="itemId" value="@item.Id" />
+                                    <input type="hidden" name="newStatus" value="@OrderItemStatus.Accepted" />
+                                    <button type="submit" class="btn btn--sm rwms-orders-action-approve">Accept</button>
+                                </form>
+                                <form asp-action="UpdateItemStatus" method="post">
+                                    <input type="hidden" name="orderId" value="@Model.Id" />
+                                    <input type="hidden" name="itemId" value="@item.Id" />
+                                    <input type="hidden" name="newStatus" value="@OrderItemStatus.Rejected" />
+                                    <button type="submit" class="btn btn--sm rwms-orders-action-reject">Reject</button>
+                                </form>
+                            }
+                        </span>
+                    }
+                </div>
+            }
+        </div>
+    </section>
+
+    @if (User.IsInRole("Owner") || User.IsInRole("Manager"))
+    {
+        <section class="card rwms-order-details-actions">
+            <div class="rwms-order-details-section-header">
+                <h3>Update Status</h3>
+            </div>
+
+            <div class="rwms-order-details-action-row">
+                @if (isPending)
+                {
+                    <form asp-action="AcceptAllItems" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn rwms-orders-action-approve">Accept All</button>
+                    </form>
+                    <form asp-action="RejectAllItems" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn rwms-orders-action-reject">Reject All</button>
+                    </form>
+                }
+                else if (Model.Status == OrderStatus.Accepted)
+                {
+                    <form asp-action="UpdateStatus" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <input type="hidden" name="newStatus" value="@OrderStatus.ReadyForDelivery" />
+                        <button type="submit" class="btn rwms-orders-action-ready">Mark Ready for Delivery</button>
+                    </form>
+                }
+                else
+                {
+                    <p class="rwms-order-actions-note">No further actions available for this order.</p>
+                }
+            </div>
+        </section>
+    }
+
+    <section class="rwms-order-details-back">
+        <a asp-action="Index" class="btn btn--secondary">Back to Orders</a>
+    </section>
+</div>
+
+@functions {
+    static string StatusClass(OrderStatus status) => status switch
+    {
+        OrderStatus.Pending => "is-pending",
+        OrderStatus.Accepted => "is-accepted",
+        OrderStatus.ReadyForDelivery => "is-ready",
+        OrderStatus.Rejected => "is-rejected",
+        _ => "is-neutral"
+    };
+
+    static string StatusLabel(OrderStatus status) => status switch
+    {
+        OrderStatus.ReadyForDelivery => "Ready For Delivery",
+        _ => status.ToString()
+    };
+
+    static string ItemStatusClass(OrderItemStatus status) => status switch
+    {
+        OrderItemStatus.Pending => "is-pending",
+        OrderItemStatus.Accepted => "is-accepted",
+        OrderItemStatus.Rejected => "is-rejected",
+        _ => "is-neutral"
+    };
+}

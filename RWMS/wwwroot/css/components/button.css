@@ -1,0 +1,112 @@
+/* =================================================================
+   COMPONENT — BUTTON
+   Shared button system for ops and portal.
+   ================================================================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0.7rem 1.25rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn:hover { text-decoration: none; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Variants ─────────────────────────────────────────────── */
+
+.btn--primary {
+  background-color: var(--color-brand);
+  color: var(--white);
+  border-color: var(--color-brand);
+}
+.btn--primary:hover {
+  background-color: var(--color-brand-hover);
+  border-color: var(--color-brand-hover);
+}
+
+.btn--secondary {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border-strong);
+}
+.btn--secondary:hover {
+  background-color: var(--gray-50);
+  border-color: var(--gray-400);
+}
+
+.btn--danger {
+  background-color: var(--color-danger);
+  color: var(--white);
+  border-color: var(--color-danger);
+}
+.btn--danger:hover {
+  background-color: var(--color-danger-hover);
+  border-color: var(--color-danger-hover);
+}
+
+.btn--success {
+  background-color: var(--green-700);
+  color: var(--white);
+  border-color: var(--green-700);
+}
+.btn--success:hover {
+  background-color: #055c38;
+  border-color: #055c38;
+}
+
+.btn--dark {
+  background-color: var(--gray-950);
+  color: var(--white);
+  border-color: var(--gray-950);
+}
+.btn--dark:hover {
+  background-color: var(--gray-900);
+  border-color: var(--gray-900);
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border-color: transparent;
+}
+.btn--ghost:hover {
+  background-color: var(--gray-50);
+  color: var(--color-text);
+}
+
+/* ── Sizes ────────────────────────────────────────────────── */
+
+.btn--sm {
+  min-height: 36px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.8125rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn--lg {
+  min-height: 52px;
+  padding: 0.9rem 1.75rem;
+  font-size: 1rem;
+}
+
+/* ── Full-width ───────────────────────────────────────────── */
+
+.btn--block {
+  display: flex;
+  width: 100%;
+}

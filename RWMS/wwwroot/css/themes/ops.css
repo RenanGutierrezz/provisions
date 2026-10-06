@@ -1,0 +1,435 @@
+/* =================================================================
+   THEME — OPS
+   Internal admin layout: sidebar + topbar + content area.
+   Same black/white editorial style as the portal, with sidebar nav.
+   Scoped to .theme-ops on <body>.
+   ================================================================= */
+
+/* ── App shell ────────────────────────────────────────────── */
+
+.theme-ops {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  background-color: var(--white);
+  color: var(--black);
+  -webkit-font-smoothing: antialiased;
+}
+
+.theme-ops .app-shell {
+  display: flex;
+  min-height: 100dvh;
+}
+
+.theme-ops .app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.theme-ops .app-content {
+  flex: 1;
+  padding: var(--space-8);
+}
+
+/* ── Sidebar — light grey, black divider ─────────────────── */
+
+.theme-ops .sidebar {
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6) var(--space-5);
+  color: var(--black);
+  border-right: 1px solid var(--black);
+  background: var(--gray-50);
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  transition: width 0.28s ease, padding 0.28s ease;
+  z-index: var(--z-sidebar);
+}
+
+.theme-ops .sidebar__brand {
+  margin-bottom: var(--space-10);
+  text-align: left;
+}
+
+.theme-ops .sidebar__brand a,
+.theme-ops .sidebar__brand-link {
+  display: inline-block;
+  color: var(--black);
+  font-family: var(--font-head);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.theme-ops .sidebar__group-label {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.theme-ops .sidebar__link {
+  color: rgba(0, 0, 0, 0.55);
+  border-radius: 0;
+}
+
+.theme-ops .sidebar__link:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+  color: var(--black);
+}
+
+.theme-ops .sidebar__link.is-active {
+  background-color: rgba(0, 0, 0, 0.06);
+  color: var(--black);
+  border-left: 3px solid var(--accent-500);
+  padding-left: calc(var(--space-3) - 3px);
+}
+
+.theme-ops .sidebar__footer {
+  border-top-color: rgba(0, 0, 0, 0.12);
+}
+
+.theme-ops .sidebar__user {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.theme-ops .sidebar__user:hover,
+.theme-ops .sidebar__user.is-active {
+  color: var(--black);
+}
+
+.theme-ops .sidebar__logout {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  color: var(--black);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: transparent;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.theme-ops .sidebar__logout:hover {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.5);
+}
+
+/* ── Topbar — white, black border ────────────────────────── */
+
+.theme-ops .topbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-topbar);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-8);
+  border-bottom: 1px solid var(--black);
+  background-color: var(--white);
+}
+
+.theme-ops .topbar__title {
+  margin: 0;
+  font-family: var(--font-head);
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--black);
+}
+
+/* ── Buttons — black/white (same as portal) ──────────────── */
+
+.theme-ops .btn--primary {
+  background-color: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  border-radius: 0;
+}
+
+.theme-ops .btn--primary:hover {
+  background-color: var(--white);
+  color: var(--black);
+}
+
+.theme-ops .btn--secondary {
+  background-color: var(--white);
+  color: var(--black);
+  border-color: var(--black);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  border-radius: 0;
+}
+
+.theme-ops .btn--secondary:hover {
+  background-color: var(--black);
+  color: var(--white);
+}
+
+.theme-ops .btn--danger {
+  border-radius: 0;
+}
+
+.theme-ops .btn--success {
+  border-radius: 0;
+}
+
+.theme-ops .btn--sm {
+  border-radius: 0;
+}
+
+/* ── Cards — black border, sharp corners ─────────────────── */
+
+.theme-ops .card {
+  border-color: var(--black);
+  border-radius: 0;
+}
+
+/* ── Forms — black border, sharp corners ─────────────────── */
+
+.theme-ops .input {
+  border-color: var(--black);
+  border-radius: 0;
+}
+
+.theme-ops .input:focus {
+  border-color: var(--black);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
+}
+
+.theme-ops .rwms-orders-date-field {
+  color: var(--color-text-secondary);
+}
+
+.theme-ops .rwms-orders-date-field input {
+  color: var(--black);
+  border-color: var(--black);
+  border-radius: 0;
+}
+
+.theme-ops .rwms-orders-date-field input:focus {
+  border-color: var(--black);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
+}
+
+.theme-ops .rwms-supply-select {
+  color: var(--black);
+  border-color: var(--black);
+  border-radius: 0;
+}
+
+.theme-ops .rwms-supply-select:focus {
+  border-color: var(--black);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Tables — black header border ────────────────────────── */
+
+.theme-ops .tbl th {
+  border-bottom-color: var(--black);
+}
+
+.theme-ops .tbl--card {
+  border-color: var(--black);
+  border-radius: 0;
+}
+
+/* ── Badges — bordered, monochrome ───────────────────────── */
+
+.theme-ops .badge {
+  border: 1px solid var(--black);
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+}
+
+/* ── Status chips — sharp, uppercase, semantic fill kept ── */
+
+.theme-ops .rwms-orders-status {
+  border-radius: 0;
+  border-color: var(--black);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ── Alerts — sharp corners ──────────────────────────────── */
+
+.theme-ops .alert {
+  border-color: var(--black);
+  border-radius: 0;
+}
+
+/* ── Burger ───────────────────────────────────────────────── */
+
+.theme-ops .burger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid var(--black);
+  border-radius: 0;
+  padding: 0.4rem 0.55rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* ── Sidebar collapse ─────────────────────────────────────── */
+
+.theme-ops.sidebar-collapsed .sidebar {
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+  border-right: none;
+}
+
+/* ── Backdrop ─────────────────────────────────────────────── */
+
+.theme-ops .sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-backdrop);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* ── Page wrapper ─────────────────────────────────────────── */
+
+.theme-ops .page {
+  width: min(100%, var(--content-max));
+  margin: 0 auto;
+}
+
+/* ── Headings ─────────────────────────────────────────────── */
+
+.theme-ops h1,
+.theme-ops h2,
+.theme-ops h3 {
+  font-family: var(--font-head);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   RESPONSIVE — TABLET (≤ 1280px)
+   ═════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1280px) {
+  .theme-ops .topbar {
+    padding: var(--space-4) var(--space-5);
+  }
+
+  .theme-ops .app-content {
+    padding: var(--space-6);
+  }
+
+  .theme-ops .topbar__title {
+    font-size: 1.25rem;
+  }
+
+  .theme-ops .sidebar {
+    position: fixed;
+    inset-block: 0;
+    left: 0;
+    height: auto;
+    align-self: auto;
+    transition: transform 0.28s ease;
+  }
+
+  .theme-ops.sidebar-collapsed .sidebar {
+    width: var(--sidebar-width);
+    padding: var(--space-6) var(--space-5);
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-right: 1px solid var(--black);
+    transform: translateX(-100%);
+  }
+
+  .theme-ops:not(.sidebar-collapsed) .sidebar-backdrop {
+    display: block;
+  }
+}
+
+/* ═════════════════════════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤ 768px)
+   Sidebar becomes a portal-style dropdown below the topbar.
+   ═════════════════════════════════════════════════════════════ */
+
+@media (max-width: 767.98px) {
+  .theme-ops .topbar {
+    height: 56px;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .theme-ops .app-content {
+    padding: var(--space-4);
+  }
+
+  .theme-ops .topbar__title {
+    font-size: 1.1rem;
+  }
+
+  /* Sidebar → full-width dropdown panel below topbar */
+  .theme-ops .sidebar {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    width: 100%;
+    height: auto;
+    max-height: calc(100dvh - 56px);
+    overflow-y: auto;
+    padding: var(--space-4) var(--space-5);
+    border-right: none;
+    border-bottom: 1px solid var(--black);
+    transform: none;
+  }
+
+  /* Compact spacing for dropdown */
+  .theme-ops .sidebar__brand {
+    margin-bottom: var(--space-4);
+  }
+
+  .theme-ops .sidebar__nav {
+    gap: var(--space-4);
+  }
+
+  /* Hidden by default */
+  .theme-ops.sidebar-collapsed .sidebar {
+    display: none;
+    transform: none;
+    width: 100%;
+    padding: var(--space-4) var(--space-5);
+    border-right: none;
+  }
+
+  /* Visible when toggled open */
+  .theme-ops:not(.sidebar-collapsed) .sidebar {
+    display: flex;
+  }
+
+  /* No backdrop — clean dropdown like portal */
+  .theme-ops .sidebar-backdrop,
+  .theme-ops:not(.sidebar-collapsed) .sidebar-backdrop {
+    display: none !important;
+  }
+}

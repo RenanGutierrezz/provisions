@@ -1,0 +1,222 @@
+@model RWMS.Models.ViewModels.Finance.FinanceReportViewModel
+
+@{
+    ViewData["Title"] = "Financial Report";
+    var top5Label = (Model.From.HasValue || Model.To.HasValue)
+        ? "Top 5 Orders — Selected Period"
+        : $"Top 5 Orders — {DateTime.Now:MMMM yyyy}";
+}
+
+<div class="page rwms-finance-page o-stack">
+    <section class="card rwms-finance-hero">
+        <div>
+            <h2>Overview</h2>
+            <p class="rwms-products-copy">Track revenue and order performance across the selected reporting period.</p>
+        </div>
+    </section>
+
+    <section class="card rwms-finance-toolbar">
+        <form method="get" class="rwms-finance-toolbar-form">
+            <label class="rwms-orders-date-field">
+                <span>From</span>
+                <input type="date" id="from" name="from"
+                       value="@(Model.From.HasValue ? Model.From.Value.ToString("yyyy-MM-dd") : "")" />
+            </label>
+
+            <label class="rwms-orders-date-field">
+                <span>To</span>
+                <input type="date" id="to" name="to"
+                       value="@(Model.To.HasValue ? Model.To.Value.ToString("yyyy-MM-dd") : "")" />
+            </label>
+
+            <div class="rwms-finance-toolbar-actions">
+                <button type="submit" class="btn btn--primary">Filter</button>
+                <a asp-action="Index" class="btn btn--secondary">Clear</a>
+            </div>
+        </form>
+    </section>
+
+    <section class="rwms-finance-summary">
+        <article class="card rwms-finance-stat">
+            <p>Total Revenue</p>
+            <strong>@Model.TotalRevenue.ToString("C")</strong>
+            <span>@Model.OrderCount order(s)</span>
+        </article>
+        <article class="card rwms-finance-stat">
+            <p>Supply Costs</p>
+            <strong>@Model.TotalSupplyCost.ToString("C")</strong>
+            <span>total spending</span>
+        </article>
+        <article class="card rwms-finance-stat @(Model.GrossProfit >= 0 ? "rwms-finance-stat-profit" : "rwms-finance-stat-loss")">
+            <p>Gross Profit</p>
+            <strong>@Model.GrossProfit.ToString("C")</strong>
+            <span>@Model.ProfitMarginPercent% margin</span>
+        </article>
+        <article class="card rwms-finance-stat">
+            <p>Avg. Order Value</p>
+            <strong>@Model.AverageOrderValue.ToString("C")</strong>
+            <span>per order</span>
+        </article>
+        <article class="card rwms-finance-stat">
+            <p>Best Customer</p>
+            <strong class="rwms-finance-stat-name">@(string.IsNullOrEmpty(Model.TopCustomerName) ? "—" : Model.TopCustomerName)</strong>
+            @if (!string.IsNullOrEmpty(Model.TopCustomerName))
+            {
+                <span>@Model.TopCustomerRevenue.ToString("C") this period</span>
+            }
+            else
+            {
+                <span>No orders yet</span>
+            }
+        </article>
+    </section>
+
+    @if (Model.Orders.Count > 0)
+    {
+        <section class="rwms-finance-chart-pair">
+            <article class="card rwms-finance-chart-card">
+                <div class="rwms-panel-header">
+                    <div>
+                        <h3>Revenue per Order</h3>
+                    </div>
+                </div>
+                <div class="rwms-finance-chart-shell">
+                    <canvas id="ordersChart"></canvas>
+                </div>
+            </article>
+            @if (Model.CustomerMonthlyRevenue.Count > 0)
+            {
+                <article class="card rwms-finance-chart-card">
+                    <div class="rwms-panel-header">
+                        <div>
+                            <h3>Revenue by Customer Over Time</h3>
+                        </div>
+                    </div>
+                    <div class="rwms-finance-chart-shell">
+                        <canvas id="customerTrendChart"></canvas>
+                    </div>
+                </article>
+            }
+        </section>
+    }
+
+    @if (Model.RevenueByCustomer.Count > 0)
+    {
+        <section class="card rwms-finance-table-card">
+            <div class="rwms-panel-header">
+                <div>
+                    <h3>Revenue by Customer</h3>
+                </div>
+            </div>
+            <div class="rwms-finance-table">
+                <div class="rwms-finance-table-head rwms-finance-customer-head">
+                    <span>Customer</span>
+                    <span>Orders</span>
+                    <span>Total Revenue</span>
+                </div>
+                @foreach (var customer in Model.RevenueByCustomer)
+                {
+                    <article class="rwms-finance-table-row rwms-finance-customer-row">
+                        <span>@customer.CustomerName</span>
+                        <span>@customer.OrderCount</span>
+                        <strong>@customer.TotalRevenue.ToString("C")</strong>
+                    </article>
+                }
+            </div>
+        </section>
+    }
+
+    <section class="rwms-finance-detail-grid">
+        <article class="card rwms-finance-table-card">
+            <div class="rwms-panel-header">
+                <div>
+                    <h3>@top5Label</h3>
+                </div>
+            </div>
+
+            @if (Model.TopOrdersThisMonth.Count == 0)
+            {
+                <p class="rwms-finance-empty">No orders in this period.</p>
+            }
+            else
+            {
+                <div class="rwms-finance-table">
+                    <div class="rwms-finance-table-head rwms-finance-orders-head">
+                        <span>Order #</span>
+                        <span>Customer</span>
+                        <span>Date</span>
+                        <span>Amount</span>
+                    </div>
+                    @foreach (var order in Model.TopOrdersThisMonth)
+                    {
+                        <article class="rwms-finance-table-row rwms-finance-orders-row">
+                            <span>#@order.OrderId</span>
+                            <span>@order.CustomerName</span>
+                            <span>@order.OrderDate.ToString("MMM d, yyyy")</span>
+                            <strong>@order.Amount.ToString("C")</strong>
+                        </article>
+                    }
+                </div>
+            }
+        </article>
+    </section>
+</div>
+
+@section Scripts {
+    @if (Model.Orders.Count > 0)
+    {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+        @if (Model.CustomerMonthlyRevenue.Count > 0)
+        {
+        <script>
+        (function () {
+            var palette = ['#2563eb','#16a34a','#dc2626','#d97706','#7c3aed','#0891b2'];
+            var datasets = [@Html.Raw(string.Join(",", Model.CustomerMonthlyRevenue.Select((c, i) =>
+                $"{{label:\"{c.CustomerName}\",data:[{string.Join(",", c.MonthlyAmounts)}],borderColor:palette[{i}],backgroundColor:'transparent',tension:0.35,pointRadius:4,pointHoverRadius:6,borderWidth:2.5}}"
+            )))];
+            new Chart(document.getElementById('customerTrendChart'), {
+                type: 'line',
+                data: {
+                    labels: [@Html.Raw(string.Join(",", Model.ChartMonths.Select(m => $"\"{m}\"")))],
+                    datasets: datasets
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#e7ebf1' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        })();
+        </script>
+        }
+        <script>
+        new Chart(document.getElementById('ordersChart'), {
+            type: 'bar',
+            data: {
+                labels: [@Html.Raw(string.Join(",", Model.Orders.Select(o => $"\"#{o.OrderId} {o.OrderDate:MMM d}\"")))],
+                datasets: [{
+                    label: 'Order Amount',
+                    data: [@string.Join(",", Model.Orders.Select(o => o.Amount))],
+                    backgroundColor: '#43b96f',
+                    borderRadius: 10,
+                    maxBarThickness: 48
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#e7ebf1' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+        </script>
+    }
+}

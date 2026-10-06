@@ -1,0 +1,95 @@
+@model RWMS.Models.ViewModels.Portal.CatalogViewModel
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/_PortalLayout.cshtml";
+}
+
+<div class="portal-page-header">
+    <div>
+        <h1>Products</h1>
+        <p>@Model.Products.Count item@(Model.Products.Count == 1 ? "" : "s") available</p>
+    </div>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <a asp-controller="CustomerOrder" asp-action="PlaceOrder" class="portal-btn">Place an Order</a>
+    }
+    else
+    {
+        <a asp-controller="Account" asp-action="Login" class="portal-btn">Log in to Order</a>
+    }
+</div>
+
+<form method="get" class="portal-search-bar">
+    <input type="text" name="search" value="@Model.Search" placeholder="Search products..." aria-label="Search products" />
+
+    <select name="category" onchange="this.form.submit()" aria-label="Filter by category">
+        <option value="">All categories</option>
+        @foreach (var cat in Model.Categories)
+        {
+            <option value="@cat" selected="@(Model.SelectedCategory == cat ? "selected" : null)">@cat</option>
+        }
+    </select>
+
+    <button type="submit" class="portal-btn">Search</button>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Search) || !string.IsNullOrWhiteSpace(Model.SelectedCategory))
+    {
+        <a asp-action="Index" class="portal-btn portal-btn-outline">Clear</a>
+    }
+</form>
+
+@if (!Model.Products.Any())
+{
+    <p class="portal-empty">No products found.</p>
+}
+else
+{
+    <div class="portal-card-grid">
+        @foreach (var product in Model.Products)
+        {
+            <article class="portal-product-card">
+                <div class="portal-product-art">
+                    @if (product.ImageSlug is string slug)
+                    {
+                        <img src="~/img/products/@(slug).png" alt="@product.Name" loading="lazy" width="1200" height="900" />
+                    }
+                    else
+                    {
+                        <span class="portal-product-art-text">@product.Category</span>
+                    }
+                </div>
+
+                <div class="portal-product-body">
+                    @if (!string.IsNullOrWhiteSpace(product.Category))
+                    {
+                        <p class="portal-product-category">@product.Category</p>
+                    }
+                    <h2>@product.Name</h2>
+
+                    @if (!string.IsNullOrWhiteSpace(product.Description))
+                    {
+                        <p class="portal-product-desc">@product.Description</p>
+                    }
+
+                    @if (product.ParLevel.HasValue || product.LastOrderedAt.HasValue)
+                    {
+                        <div class="portal-product-meta">
+                            @if (product.ParLevel.HasValue)
+                            {
+                                <span>PAR: @product.ParLevel</span>
+                            }
+                            @if (product.LastOrderedAt.HasValue)
+                            {
+                                <span>Last ordered: @product.LastOrderedAt.Value.ToString("MMM d, yyyy")</span>
+                            }
+                        </div>
+                    }
+
+                    <div class="portal-product-foot">
+                        <span class="portal-product-price">$@product.Price.ToString("F2") / @product.Unit</span>
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+}

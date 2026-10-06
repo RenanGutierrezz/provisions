@@ -1,0 +1,67 @@
+@model RWMS.Models.ViewModels.AccountRequest.SubmitRequestViewModel
+
+@{
+    ViewData["Title"] = "Become a Customer";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="rwms-auth-brand">
+    <h1 class="rwms-auth-brand-name">RWMS</h1>
+    <p class="rwms-auth-brand-tagline">Restaurant Wholesale Management</p>
+</div>
+
+<div class="rwms-auth-card">
+    <h2 class="rwms-auth-title">Request an Account</h2>
+    <p class="rwms-auth-subtitle">Fill out the form below and our team will review your request. Once approved, you'll receive an email with instructions to set up your account.</p>
+
+    <form asp-action="Apply" method="post" class="rwms-auth-form">
+        <div asp-validation-summary="ModelOnly" class="rwms-auth-alert is-error"></div>
+
+        <div class="rwms-field-row">
+            <div class="rwms-field">
+                <label>First Name</label>
+                <input asp-for="FirstName" class="rwms-input" placeholder="First name" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="rwms-field">
+                <label>Last Name</label>
+                <input asp-for="LastName" class="rwms-input" placeholder="Last name" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="rwms-field">
+            <label>Company / Business Name</label>
+            <input asp-for="CompanyName" class="rwms-input" placeholder="Your restaurant or business name" />
+            <span asp-validation-for="CompanyName" class="text-danger"></span>
+        </div>
+
+        <div class="rwms-field">
+            <label>Email</label>
+            <input asp-for="Email" class="rwms-input" placeholder="you@company.com" autocomplete="email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="rwms-field">
+            <label>Phone <span class="rwms-field-optional">(optional)</span></label>
+            <input asp-for="Phone" class="rwms-input" placeholder="(416) 555-0100" autocomplete="tel" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+
+        <div class="rwms-field">
+            <label>Message <span class="rwms-field-optional">(optional)</span></label>
+            <textarea asp-for="Message" class="rwms-input rwms-request-message" rows="3" placeholder="Tell us about your business and what you're looking for..."></textarea>
+            <span asp-validation-for="Message" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="rwms-auth-btn">Submit Request</button>
+    </form>
+
+    <div class="rwms-auth-links">
+        <a asp-controller="Account" asp-action="Login">Already have an account? Log in</a>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

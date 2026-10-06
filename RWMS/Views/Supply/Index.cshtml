@@ -1,0 +1,150 @@
+@model RWMS.Models.ViewModels.Supply.SupplyPageViewModel
+
+@{
+    ViewData["Title"] = "Supply List";
+
+    const int pageSize = 5;
+    var requestedPage = 1;
+    if (!int.TryParse(Context.Request.Query["page"], out requestedPage) || requestedPage < 1)
+        requestedPage = 1;
+
+    var totalItems  = Model.Items.Count;
+    var totalPages  = Math.Max(1, (int)Math.Ceiling(totalItems / (double)pageSize));
+    var currentPage = Math.Min(requestedPage, totalPages);
+    var pagedItems  = Model.Items.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+    var groups = pagedItems
+        .GroupBy(i => string.IsNullOrWhiteSpace(i.Category) ? "Other" : i.Category)
+        .OrderBy(g => g.Key)
+        .ToList();
+
+    string PageUrl(int page) => Url.Action("Index", new { search = Model.Search, category = Model.Category, page }) ?? "#";
+}
+
+<div class="page rwms-supply-page o-stack">
+    <section class="rwms-supply-hero">
+        <div class="rwms-supply-hero-text">
+            <p class="rwms-supply-copy">Items to buy. Mark each one as bought once you get it — it comes off the list.</p>
+            <div class="rwms-supply-summary">
+                <span class="rwms-supply-summary-chip is-total">@totalItems item@(totalItems == 1 ? "" : "s") to buy</span>
+            </div>
+        </div>
+        <div class="rwms-supply-hero-actions">
+            <a asp-action="DownloadSheet" class="btn btn--secondary">
+                <i class="ti ti-file-download"></i> Shopping List
+            </a>
+            <a asp-action="Catalog" class="btn btn--secondary">
+                <i class="ti ti-archive"></i> Catalog
+            </a>
+            <a asp-action="Create" class="btn btn--primary">Add Item</a>
+        </div>
+    </section>
+
+    <section class="card rwms-supply-toolbar">
+        <form method="get" class="rwms-supply-toolbar-form">
+            <label class="rwms-orders-search" aria-label="Search supply items">
+                <span class="rwms-orders-search-icon" aria-hidden="true">Q</span>
+                <input type="text" name="search" value="@Model.Search" placeholder="Search by name..." />
+            </label>
+
+            @if (Model.Categories.Count > 0)
+            {
+                <select name="category" class="rwms-supply-select">
+                    <option value="">All categories</option>
+                    @foreach (var cat in Model.Categories)
+                    {
+                        @if (Model.Category == cat)
+                        {
+                            <option value="@cat" selected>@cat</option>
+                        }
+                        else
+                        {
+                            <option value="@cat">@cat</option>
+                        }
+                    }
+                </select>
+            }
+
+            <div class="rwms-supply-toolbar-actions">
+                <button type="submit" class="btn btn--secondary">Filter</button>
+                <a asp-action="Index" class="btn btn--secondary">Clear</a>
+            </div>
+        </form>
+    </section>
+
+    @if (!Model.Items.Any())
+    {
+        <section class="empty-state card">
+            No items on the list.
+        </section>
+    }
+    else
+    {
+        @foreach (var group in groups)
+        {
+            <section class="rwms-supply-group">
+                <div class="rwms-supply-group-header">
+                    <span class="rwms-supply-group-name">@group.Key</span>
+                    <span class="rwms-supply-group-count">@group.Count() item@(group.Count() == 1 ? "" : "s")</span>
+                </div>
+
+                <div class="card rwms-supply-list">
+                    <div class="rwms-supply-head">
+                        <span>Item</span>
+                        <span>Qty Needed</span>
+                        <span>Notes</span>
+                        <span class="rwms-supply-head-actions">Actions</span>
+                    </div>
+
+                    @foreach (var item in group)
+                    {
+                        <article class="rwms-supply-row">
+                            <div class="rwms-supply-primary">
+                                <strong>@item.Name</strong>
+                                <span>@item.Unit</span>
+                            </div>
+                            <span data-label="Qty Needed">@item.QuantityNeeded @item.Unit</span>
+                            <span data-label="Notes">@(item.Notes ?? "—")</span>
+                            <div class="rwms-supply-actions">
+                                <form asp-action="MarkComplete" asp-route-id="@item.Id" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn--success">Got it</button>
+                                </form>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn--secondary">Edit</a>
+                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Remove this item?')">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn--danger">Remove</button>
+                                </form>
+                            </div>
+                        </article>
+                    }
+                </div>
+            </section>
+        }
+
+        @if (totalItems > pageSize)
+        {
+            <section class="rwms-orders-pagination card">
+                @if (currentPage > 1)
+                {
+                    <a href="@PageUrl(currentPage - 1)" class="btn btn--secondary">Previous</a>
+                }
+                else
+                {
+                    <button type="button" class="btn btn--secondary" disabled>Previous</button>
+                }
+
+                <span>Page @currentPage of @totalPages</span>
+
+                @if (currentPage < totalPages)
+                {
+                    <a href="@PageUrl(currentPage + 1)" class="btn btn--secondary">Next</a>
+                }
+                else
+                {
+                    <button type="button" class="btn btn--secondary" disabled>Next</button>
+                }
+            </section>
+        }
+    }
+</div>

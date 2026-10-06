@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RWMS Wholesale</title>
+    <link rel="stylesheet" href="~/css/tokens.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/reset.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/elements.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/objects.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/button.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/card.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/badge.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/table.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/form.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/alert.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/nav.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/portal.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/themes/portal.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="theme-portal portal-body">
+
+<nav class="portal-nav">
+    <a class="portal-nav-brand" asp-controller="Catalog" asp-action="Index">RWMS — Wholesale</a>
+
+    <button class="portal-nav-hamburger" id="nav-toggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <ul class="portal-nav-links" id="nav-links">
+        <li><a asp-controller="Catalog" asp-action="Index">Products</a></li>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <li><a asp-controller="CustomerOrder" asp-action="Index">My Orders</a></li>
+            <li><a asp-controller="Profile" asp-action="Index">Account</a></li>
+            <li class="portal-nav-logout">
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit">Log out</button>
+                </form>
+            </li>
+        }
+        else
+        {
+            <li><a asp-controller="Account" asp-action="Login">Log in</a></li>
+        }
+    </ul>
+</nav>
+
+<main class="portal-main">
+    @if (TempData["Success"] is string success)
+    {
+        <div class="portal-alert">@success</div>
+    }
+    @if (TempData["Error"] is string error)
+    {
+        <div class="portal-alert portal-alert-error">@error</div>
+    }
+
+    @RenderBody()
+</main>
+
+<footer class="portal-footer">
+    &copy; @DateTime.Now.Year RWMS &mdash; Wholesale Portal
+</footer>
+
+@await RenderSectionAsync("Scripts", required: false)
+<script>
+    document.getElementById('nav-toggle').addEventListener('click', function () {
+        document.getElementById('nav-links').classList.toggle('is-open');
+    });
+</script>
+</body>
+</html>

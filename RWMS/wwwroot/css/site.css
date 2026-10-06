@@ -1,0 +1,583 @@
+/* =================================================================
+   SITE — OPS page-specific responsive rules
+   Primitives (page, card, btn, badge, table, form, alert) are
+   handled by components/*.css + themes/ops.css.
+   This file contains ONLY page-level responsive breakpoints.
+   ================================================================= */
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+  .rwms-auth-wrapper {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .rwms-auth-card {
+    max-width: 100%;
+    min-height: auto;
+    flex-direction: column;
+  }
+
+  .rwms-auth-card-register {
+    min-height: auto;
+  }
+
+  .rwms-auth-left,
+  .rwms-auth-right {
+    width: 100%;
+    padding: var(--space-8);
+  }
+
+  .rwms-auth-left {
+    text-align: center;
+  }
+
+  .rwms-auth-left h1 {
+    font-size: 2.8rem;
+  }
+
+  .rwms-auth-left p {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .rwms-auth-right > div {
+    max-width: 100%;
+  }
+
+  .rwms-auth-btn {
+    width: 100%;
+  }
+
+  .rwms-field-row,
+  .rwms-dashboard-grid,
+  .rwms-order-details-grid,
+  .rwms-my-order-summary-head,
+  .rwms-my-order-summary-values {
+    grid-template-columns: 1fr;
+  }
+
+  .rwms-order-details-table-row {
+    grid-template-columns: 1fr;
+  }
+
+  .rwms-place-order-row,
+  .rwms-client-dashboard-summary,
+  .rwms-client-dashboard-grid,
+  .rwms-client-dashboard-order-meta,
+  .rwms-finance-chart-grid,
+  .rwms-finance-detail-grid,
+  .rwms-client-edit-grid,
+  .rwms-clients-summary,
+  .rwms-clients-head,
+  .rwms-clients-row,
+  .rwms-product-form-grid,
+  .rwms-product-detail-grid,
+  .rwms-product-detail-list,
+  .rwms-supply-detail-grid,
+  .rwms-supply-detail-list,
+  .rwms-supply-edit-grid,
+  .rwms-products-grid,
+  .rwms-place-order-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Inventory table: scroll horizontally instead of collapsing */
+  .rwms-inventory-list {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .rwms-inventory-head,
+  .rwms-inventory-row {
+    min-width: 560px;
+  }
+
+  .rwms-place-order-quantity {
+    justify-content: flex-start;
+  }
+
+  .rwms-contact-card {
+    width: 100%;
+  }
+
+  /* Products table: scroll horizontally on tablet */
+  .rwms-restaurant-products-list {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .rwms-restaurant-products-head,
+  .rwms-restaurant-product-row {
+    min-width: 640px;
+  }
+
+}
+
+@media (max-width: 1100px) and (min-width: 769px) {
+  .rwms-my-orders-page .rwms-orders-toolbar-top {
+    align-items: flex-start;
+  }
+
+  .rwms-my-orders-page .rwms-orders-tabs {
+    justify-content: flex-end;
+    gap: var(--space-4);
+  }
+
+  .rwms-my-orders-page .rwms-orders-toolbar-bottom {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .rwms-my-orders-page .rwms-orders-search {
+    width: min(100%, 280px);
+  }
+
+  .rwms-my-orders-page .rwms-order-summary-row,
+  .rwms-my-orders-page .rwms-my-order-summary-head,
+  .rwms-my-orders-page .rwms-my-order-summary-values {
+    grid-template-columns: 1fr 1.5fr 0.9fr 1fr 1fr;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .rwms-dashboard-heading {
+    font-size: 1.5rem;
+  }
+
+  .rwms-panel-header,
+  .rwms-orders-toolbar-top,
+  .rwms-orders-toolbar-bottom,
+  .rwms-order-details-hero-content,
+  .rwms-order-details-section-header,
+  .rwms-order-details-action-row,
+  .rwms-order-card-body,
+  .rwms-order-item,
+  .rwms-alert-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .rwms-orders-tabs {
+    justify-content: flex-start;
+  }
+
+  .rwms-orders-search,
+  .rwms-order-actions,
+  .rwms-place-order-toolbar .rwms-orders-search {
+    width: 100%;
+  }
+
+  .rwms-orders-filter-fields {
+    position: static;
+    min-width: 0;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .rwms-order-card-footer {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .rwms-place-order-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .rwms-place-order-toolbar-form,
+  .rwms-place-order-toolbar-actions {
+    width: 100%;
+  }
+
+  .rwms-place-order-toolbar-actions {
+    justify-content: flex-start;
+  }
+
+  .rwms-client-dashboard-hero,
+  .rwms-client-panel-header,
+  .rwms-clients-hero,
+  .rwms-inventory-hero,
+  .rwms-product-form-hero,
+  .rwms-product-detail-hero,
+  .rwms-supply-detail-hero,
+  .rwms-supply-edit-hero,
+  .rwms-supply-hero,
+  .rwms-restaurant-products-hero,
+  .rwms-products-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .rwms-restaurant-product-actions {
+    justify-content: flex-start;
+  }
+
+  .rwms-supply-toolbar-form,
+  .rwms-products-toolbar-form,
+  .rwms-orders-toolbar-form,
+  .rwms-clients-toolbar-form,
+  .rwms-finance-toolbar-form,
+  .rwms-inventory-toolbar-form,
+  .rwms-supply-hero-actions {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .rwms-supply-detail-hero-meta {
+    justify-items: start;
+  }
+
+  .rwms-product-detail-hero-meta {
+    justify-items: start;
+  }
+
+  .rwms-product-detail-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .rwms-supply-detail-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .rwms-badge {
+    align-self: flex-start;
+  }
+
+  .rwms-contact-card {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 768px) and (min-width: 621px) {
+  .rwms-my-orders-page .rwms-orders-toolbar-top,
+  .rwms-my-orders-page .rwms-orders-toolbar-bottom {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .rwms-my-orders-page .rwms-orders-tabs {
+    justify-content: flex-end;
+    gap: var(--space-3);
+  }
+
+  .rwms-my-orders-page .rwms-orders-search {
+    width: min(100%, 250px);
+  }
+
+  .rwms-my-orders-page .rwms-orders-filter-fields {
+    position: absolute;
+    right: 0;
+    width: min(100%, 420px);
+    min-width: 0;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .rwms-my-orders-page .rwms-orders-apply-button {
+    grid-column: 1 / -1;
+  }
+
+  .rwms-my-orders-page .rwms-my-order-summary-head,
+  .rwms-my-orders-page .rwms-my-order-summary-values {
+    grid-template-columns: 1fr 1.35fr 0.95fr 1fr 1fr;
+  }
+
+  .rwms-my-orders-page .rwms-orders-pagination {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+@media (max-width: 900px) and (min-width: 481px) {
+  .rwms-my-orders-page .rwms-orders-toolbar {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+
+  .rwms-my-orders-page .rwms-orders-toolbar-top,
+  .rwms-my-orders-page .rwms-orders-toolbar-bottom {
+    flex-direction: row !important;
+    align-items: flex-start !important;
+  }
+
+  .rwms-my-orders-page .rwms-orders-toolbar-top {
+    margin-bottom: var(--space-4);
+  }
+
+  .rwms-my-orders-page .rwms-orders-tabs {
+    justify-content: flex-end !important;
+    gap: var(--space-3);
+  }
+
+  .rwms-my-orders-page .rwms-orders-toolbar-bottom {
+    margin-top: 0 !important;
+  }
+
+  .rwms-my-orders-page .rwms-orders-search {
+    width: min(100%, 240px) !important;
+  }
+
+  .rwms-my-orders-page .rwms-order-summary-row.rwms-my-order-summary-head,
+  .rwms-my-orders-page .rwms-order-summary-row.rwms-my-order-summary-values {
+    grid-template-columns: 1fr 1.3fr 0.95fr 1fr 1fr !important;
+  }
+
+  .rwms-my-orders-page .rwms-orders-pagination {
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+
+  .rwms-my-orders-page .rwms-my-order-summary-values .rwms-orders-status {
+    width: 132px !important;
+    min-width: 132px !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding-inline: 0 !important;
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 769px) {
+  .rwms-restaurant-product-actions {
+    display: grid;
+    justify-items: end;
+  }
+
+  .rwms-restaurant-product-actions .btn {
+    min-width: 112px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .rwms-restaurant-product-actions {
+    display: grid !important;
+    justify-items: end;
+    align-content: start;
+  }
+
+  .rwms-restaurant-product-actions > a:first-child {
+    order: 2;
+  }
+
+  .rwms-restaurant-product-actions > a:nth-child(2) {
+    order: 1;
+  }
+
+  .rwms-restaurant-product-actions > form {
+    order: 3;
+  }
+
+  .rwms-restaurant-product-actions .btn,
+  .rwms-restaurant-product-actions form,
+  .rwms-restaurant-product-actions form .btn {
+    width: 120px;
+    min-width: 120px;
+  }
+}
+
+/* =========================
+   RESPONSIVE — TABLET (≤1280px)
+   Covers all iPad landscape sizes. Sidebar becomes overlay so content
+   always uses full viewport width.
+========================= */
+@media (max-width: 1280px) {
+  /* Stat grids: 3 columns → 2 columns on tablet */
+  .rwms-stats-grid,
+  .rwms-inventory-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Toolbar and hero rows: wrap instead of overflow */
+  .rwms-orders-toolbar-header {
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .rwms-restaurant-products-hero,
+  .rwms-supply-hero,
+  .rwms-products-hero {
+    flex-wrap: wrap;
+  }
+
+  /* Sidebar responsive handled by themes/ops.css */
+}
+
+@media (max-width: 600px) {
+  .rwms-auth-wrapper {
+    padding: var(--space-8) var(--space-4);
+  }
+
+  .rwms-auth-card {
+    max-width: 420px;
+    min-height: auto;
+    margin: 0 auto;
+    border-radius: 20px;
+  }
+
+  .rwms-auth-card-register {
+    max-width: 420px;
+  }
+
+  .rwms-auth-left,
+  .rwms-auth-right {
+    padding: 1.4rem;
+  }
+
+  .rwms-auth-left h1 {
+    font-size: 2.3rem;
+  }
+
+  .rwms-auth-left p {
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .rwms-auth-title {
+    font-size: 1.8rem;
+  }
+
+  .rwms-auth-subtitle {
+    margin-bottom: 1.2rem;
+  }
+
+  .rwms-input {
+    padding: 0.9rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .rwms-remember,
+  .rwms-auth-link {
+    font-size: 0.95rem;
+  }
+}
+
+
+/* =========================
+   RESPONSIVE — MOBILE
+========================= */
+
+@media (max-width: 767.98px) {
+  /* Grids that were 2-col on tablet → 1-col on mobile */
+  .rwms-stats-grid,
+  .rwms-inventory-summary {
+    grid-template-columns: 1fr;
+  }
+
+  /* Order summary columns → stack on mobile */
+  .rwms-order-summary-row {
+    grid-template-columns: 1fr;
+  }
+
+  .rwms-finance-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .rwms-finance-chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rwms-finance-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rwms-order-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rwms-product-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
+   ORDER CREATE — ITEMS
+========================= */
+
+.rwms-order-items-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.rwms-order-items-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rwms-order-items-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.rwms-order-item-row {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.rwms-order-item-product {
+  flex: 1;
+  min-width: 200px;
+}
+
+.rwms-order-item-qty {
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.rwms-order-total-preview {
+  text-align: right;
+  font-size: 1.05rem;
+  color: var(--color-text-secondary);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+/* =========================
+   CUSTOMER / DELIVERY TABLE HEADS
+========================= */
+
+.rwms-customers-head {
+  grid-template-columns: 2fr 1fr 1fr 0.5fr 0.7fr 1.5fr;
+}
+
+.rwms-customers-head ~ .rwms-restaurant-product-row {
+  grid-template-columns: 2fr 1fr 1fr 0.5fr 0.7fr 1.5fr;
+}
+
+.rwms-deliveries-head {
+  grid-template-columns: 1.2fr 1.5fr 1fr 0.8fr 1.5fr;
+}
+
+.rwms-deliveries-head ~ .rwms-restaurant-product-row {
+  grid-template-columns: 1.2fr 1.5fr 1fr 0.8fr 1.5fr;
+}
+
+/* =========================
+   CHECKBOX FIELD
+========================= */
+
+.rwms-checkbox-field {
+  flex-direction: row !important;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rwms-checkbox-field input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--color-brand);
+}

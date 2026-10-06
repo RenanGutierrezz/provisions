@@ -1,0 +1,79 @@
+@model RWMS.Models.ViewModels.Delivery.DeliveryListPageViewModel
+
+@{
+    ViewData["Title"] = "Deliveries";
+    const int pageSize = 5;
+    if (!int.TryParse(Context.Request.Query["page"], out var requestedPage) || requestedPage < 1)
+        requestedPage = 1;
+
+    var total = Model.Deliveries.Count;
+    var totalPages = Math.Max(1, (int)Math.Ceiling(total / (double)pageSize));
+    var currentPage = Math.Min(requestedPage, totalPages);
+    var paged = Model.Deliveries.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+    string PageUrl(int page) => Url.Action("Index", new { page }) ?? "#";
+}
+
+<div class="page o-stack">
+    <section class="rwms-restaurant-products-hero">
+        <p class="rwms-restaurant-products-copy">Plan delivery runs and generate driver sheets.</p>
+        <a asp-action="Create" class="btn btn--primary">New Delivery</a>
+    </section>
+
+    @if (!Model.Deliveries.Any())
+    {
+        <section class="empty-state card">
+            <span>No deliveries yet.</span>
+        </section>
+    }
+    else
+    {
+        <section class="card rwms-restaurant-products-list rwms-deliveries-list">
+            <div class="rwms-restaurant-products-head rwms-deliveries-head">
+                <span>Date</span>
+                <span>Driver</span>
+                <span>Orders</span>
+                <span>Status</span>
+                <span>Actions</span>
+            </div>
+
+            @foreach (var d in paged)
+            {
+                <article class="rwms-restaurant-product-row">
+                    <span><strong>@d.Date.ToString("dd MMM yyyy")</strong></span>
+                    <span>@d.DriverName</span>
+                    <span>@d.OrderCount order(s)</span>
+                    <span class="rwms-orders-status @(d.IsComplete ? "is-ready" : "is-pending")">
+                        @(d.IsComplete ? "Complete" : "Pending")
+                    </span>
+                    <div class="rwms-restaurant-product-actions">
+                        <a asp-action="Details" asp-route-id="@d.Id" class="btn btn--secondary">Details</a>
+                        <a asp-action="DownloadSheet" asp-route-id="@d.Id" class="btn btn--secondary">PDF</a>
+                    </div>
+                </article>
+            }
+        </section>
+
+        @if (total > pageSize)
+        {
+            <section class="rwms-orders-pagination card">
+                @if (currentPage > 1)
+                {
+                    <a href="@PageUrl(currentPage - 1)" class="btn btn--secondary">Previous</a>
+                }
+                else
+                {
+                    <button type="button" class="btn btn--secondary" disabled>Previous</button>
+                }
+                <span>Page @currentPage of @totalPages</span>
+                @if (currentPage < totalPages)
+                {
+                    <a href="@PageUrl(currentPage + 1)" class="btn btn--secondary">Next</a>
+                }
+                else
+                {
+                    <button type="button" class="btn btn--secondary" disabled>Next</button>
+                }
+            </section>
+        }
+    }
+</div>

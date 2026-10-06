@@ -1,0 +1,246 @@
+.rwms-client-dashboard-page {
+  width: min(100%, 1680px);
+}
+
+.rwms-client-dashboard-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+.rwms-client-dashboard-kicker {
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rwms-client-dashboard-hero h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.rwms-client-dashboard-copy {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+}
+
+.rwms-client-dashboard-cta {
+  min-width: 190px;
+  color: var(--color-text-inverse);
+}
+
+.rwms-client-dashboard-cta:hover {
+  color: var(--color-text-inverse);
+}
+
+.card .rwms-client-dashboard-cta,
+.card .rwms-client-dashboard-cta:hover {
+  color: var(--color-text-inverse);
+}
+
+.rwms-client-dashboard-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+.rwms-client-stat-card {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.rwms-client-stat-card p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rwms-client-stat-card strong {
+  font-size: 2.6rem;
+  font-weight: 800;
+}
+
+.rwms-client-stat-card.is-pending {
+  background-color: var(--status-pending-bg);
+}
+
+.rwms-client-stat-card.is-pending p,
+.rwms-client-stat-card.is-pending strong {
+  color: var(--status-pending-text);
+}
+
+.rwms-client-stat-card.is-completed {
+  background-color: var(--status-ready-bg);
+}
+
+.rwms-client-stat-card.is-completed p,
+.rwms-client-stat-card.is-completed strong {
+  color: var(--status-ready-text);
+}
+
+.rwms-client-dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(320px, 0.95fr);
+  gap: var(--space-5);
+}
+
+.rwms-client-panel {
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+}
+
+.rwms-client-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.rwms-client-panel-header h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.72rem;
+  font-weight: 700;
+}
+
+.rwms-client-panel-header p {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+}
+
+.rwms-client-panel-empty {
+  min-height: 160px;
+}
+
+.rwms-client-dashboard-orders,
+.rwms-client-reorder-list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.rwms-client-dashboard-order,
+.rwms-client-reorder-item {
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  background-color: var(--color-surface-muted);
+}
+
+.rwms-client-dashboard-order {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.rwms-client-dashboard-order-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.rwms-client-dashboard-order-top h4 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.28rem;
+  font-weight: 700;
+}
+
+.rwms-client-dashboard-order-top p {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-muted);
+}
+
+.rwms-client-dashboard-order-meta {
+  display: grid;
+  grid-template-columns: 1.3fr 0.8fr 1fr;
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.rwms-client-dashboard-order-meta div {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.rwms-client-dashboard-order-meta dt {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.rwms-client-dashboard-order-meta dd {
+  margin: 0;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.rwms-client-dashboard-order .rwms-my-order-action {
+  justify-self: start;
+}
+
+.rwms-client-reorder-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.rwms-client-reorder-item span {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.rwms-client-quick-reorder {
+  align-content: start;
+}
+
+
+/* Deliveries list: Date Driver Orders Status Actions (5 cols) */
+.rwms-deliveries-list .rwms-restaurant-products-head,
+.rwms-deliveries-list .rwms-restaurant-product-row {
+  grid-template-columns: 1.1fr 1fr 0.85fr 0.85fr 1fr;
+}
+
+.rwms-driver-search-wrap {
+  position: relative;
+}
+
+.rwms-driver-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.rwms-driver-dropdown li {
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  color: var(--color-text);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.rwms-driver-dropdown li:hover {
+  background: var(--color-surface-muted);
+}
+

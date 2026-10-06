@@ -1,0 +1,123 @@
+@model RWMS.Models.ViewModels.AccountRequest.AccountRequestListViewModel
+@using RWMS.Models.Enums
+
+@{
+    ViewData["Title"] = "Account Requests";
+}
+
+<div class="page o-stack">
+    <section class="rwms-accounts-hero">
+        <p class="rwms-accounts-copy">Review customer applications — approve to send an invite, or reject.</p>
+    </section>
+
+    @if (TempData["Success"] is string success)
+    {
+        <div class="rwms-alert is-success">@success</div>
+    }
+
+    <section class="card rwms-accounts-toolbar">
+        <nav class="rwms-accounts-tabs">
+            <span class="rwms-orders-tab is-active">
+                <i class="ti ti-inbox"></i>
+                <span>Pending</span>
+                <span class="rwms-orders-tab-count is-pending">@Model.PendingCount</span>
+            </span>
+            <span class="rwms-orders-tab">
+                <i class="ti ti-circle-check"></i>
+                <span>Approved</span>
+                <span class="rwms-orders-tab-count is-accepted">@Model.ApprovedCount</span>
+            </span>
+            <span class="rwms-orders-tab">
+                <i class="ti ti-circle-x"></i>
+                <span>Rejected</span>
+                <span class="rwms-orders-tab-count is-rejected">@Model.RejectedCount</span>
+            </span>
+        </nav>
+    </section>
+
+    @if (!Model.Requests.Any())
+    {
+        <section class="empty-state card">
+            <span>No account requests yet.</span>
+        </section>
+    }
+    else
+    {
+        <section class="o-stack rwms-requests-list">
+            @foreach (var req in Model.Requests)
+            {
+                <article class="card rwms-request-card">
+                    <div class="rwms-request-card-header">
+                        <div>
+                            <h3>@req.FullName</h3>
+                            @if (!string.IsNullOrWhiteSpace(req.CompanyName))
+                            {
+                                <span class="rwms-request-company">@req.CompanyName</span>
+                            }
+                        </div>
+                        <span class="rwms-orders-status @StatusClass(req.Status)">@req.Status</span>
+                    </div>
+
+                    <div class="rwms-request-card-body">
+                        <dl class="rwms-request-details">
+                            <div>
+                                <dt>Email</dt>
+                                <dd>@req.Email</dd>
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(req.Phone))
+                            {
+                                <div>
+                                    <dt>Phone</dt>
+                                    <dd>@req.Phone</dd>
+                                </div>
+                            }
+                            <div>
+                                <dt>Submitted</dt>
+                                <dd>@req.CreatedAt.ToString("MMM d, yyyy h:mm tt")</dd>
+                            </div>
+                            @if (req.ReviewedAt.HasValue)
+                            {
+                                <div>
+                                    <dt>Reviewed</dt>
+                                    <dd>@req.ReviewedAt.Value.ToString("MMM d, yyyy") by @req.ReviewedByName</dd>
+                                </div>
+                            }
+                        </dl>
+
+                        @if (!string.IsNullOrWhiteSpace(req.Message))
+                        {
+                            <div class="rwms-request-message-block">
+                                <dt>Message</dt>
+                                <dd>@req.Message</dd>
+                            </div>
+                        }
+                    </div>
+
+                    @if (req.Status == AccountRequestStatus.Pending)
+                    {
+                        <div class="rwms-request-card-actions">
+                            <form asp-action="Approve" method="post">
+                                <input type="hidden" name="id" value="@req.Id" />
+                                <button type="submit" class="btn rwms-orders-action-approve">Approve & Send Invite</button>
+                            </form>
+                            <form asp-action="Reject" method="post">
+                                <input type="hidden" name="id" value="@req.Id" />
+                                <button type="submit" class="btn rwms-orders-action-reject">Reject</button>
+                            </form>
+                        </div>
+                    }
+                </article>
+            }
+        </section>
+    }
+</div>
+
+@functions {
+    static string StatusClass(AccountRequestStatus status) => status switch
+    {
+        AccountRequestStatus.Pending => "is-pending",
+        AccountRequestStatus.Approved => "is-accepted",
+        AccountRequestStatus.Rejected => "is-rejected",
+        _ => "is-neutral"
+    };
+}

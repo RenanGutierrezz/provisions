@@ -1,0 +1,90 @@
+@model RWMS.Models.ViewModels.Profile.ProfilePageViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="page o-stack">
+    <section class="card rwms-product-form-hero">
+        <div>
+            <h2>My Profile</h2>
+            <p class="rwms-products-copy">Update your name, password, and notification preferences.</p>
+        </div>
+    </section>
+
+    @if (TempData["Success"] is string msg)
+    {
+        <div class="rwms-contact-success">@msg</div>
+    }
+
+    <div class="rwms-profile-grid">
+        <section class="card rwms-product-form-card">
+            <h3>Profile</h3>
+            <form asp-action="UpdateProfile" method="post" class="rwms-product-form">
+                <div asp-validation-summary="ModelOnly" class="rwms-validation-summary"></div>
+
+                <div class="rwms-product-form-grid">
+                    <label class="rwms-contact-field">
+                        <span>First Name</span>
+                        <input asp-for="Profile.FirstName" class="rwms-contact-input" />
+                        <span asp-validation-for="Profile.FirstName" class="text-danger"></span>
+                    </label>
+
+                    <label class="rwms-contact-field">
+                        <span>Last Name</span>
+                        <input asp-for="Profile.LastName" class="rwms-contact-input" />
+                        <span asp-validation-for="Profile.LastName" class="text-danger"></span>
+                    </label>
+                </div>
+
+                <label class="rwms-contact-field">
+                    <span>Email</span>
+                    <input asp-for="Profile.Email" type="email" class="rwms-contact-input" />
+                    <span asp-validation-for="Profile.Email" class="text-danger"></span>
+                </label>
+
+                <label class="rwms-supply-edit-toggle">
+                    <input asp-for="Profile.EmailNotificationsEnabled" type="checkbox" />
+                    Receive email notifications
+                </label>
+
+                <div class="rwms-product-detail-actions">
+                    <button type="submit" class="btn btn--primary">Save Changes</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="card rwms-product-form-card">
+            <h3>Change Password</h3>
+            <form asp-action="ChangePassword" method="post" class="rwms-product-form">
+                <div asp-validation-summary="ModelOnly" class="rwms-validation-summary"></div>
+
+                <label class="rwms-contact-field">
+                    <span>Current Password</span>
+                    <input asp-for="Password.CurrentPassword" type="password" class="rwms-contact-input" />
+                    <span asp-validation-for="Password.CurrentPassword" class="text-danger"></span>
+                </label>
+
+                <label class="rwms-contact-field">
+                    <span>New Password</span>
+                    <input asp-for="Password.NewPassword" type="password" class="rwms-contact-input" />
+                    <span asp-validation-for="Password.NewPassword" class="text-danger"></span>
+                </label>
+
+                <label class="rwms-contact-field">
+                    <span>Confirm New Password</span>
+                    <input asp-for="Password.ConfirmNewPassword" type="password" class="rwms-contact-input" />
+                    <span asp-validation-for="Password.ConfirmNewPassword" class="text-danger"></span>
+                </label>
+
+                <div class="rwms-product-detail-actions">
+                    <button type="submit" class="btn btn--primary">Change Password</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

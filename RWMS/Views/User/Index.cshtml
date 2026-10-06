@@ -1,0 +1,128 @@
+@model RWMS.Models.ViewModels.User.UserListPageViewModel
+
+@{
+    ViewData["Title"] = "Accounts";
+    const int pageSize = 5;
+    if (!int.TryParse(Context.Request.Query["page"], out var requestedPage) || requestedPage < 1)
+        requestedPage = 1;
+
+    var totalUsers = Model.Users.Count;
+    var totalPages = Math.Max(1, (int)Math.Ceiling(totalUsers / (double)pageSize));
+    var currentPage = Math.Min(requestedPage, totalPages);
+    var paged = Model.Users.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+    string PageUrl(int page) => Url.Action("Index", new { search = Model.Search, role = Model.Role, page }) ?? "#";
+    string TabUrl(string? role) => Url.Action("Index", new { search = Model.Search, role }) ?? "#";
+
+    bool IsActiveTab(string? tabRole) { return string.Equals(Model.Role, tabRole, StringComparison.OrdinalIgnoreCase); }
+    var isAllTab = string.IsNullOrEmpty(Model.Role);
+}
+
+<div class="page o-stack">
+    <section class="rwms-accounts-hero">
+        <p class="rwms-accounts-copy">Manage all system accounts — clients, managers, and owners.</p>
+    </section>
+
+    <section class="card rwms-accounts-toolbar">
+        <nav class="rwms-accounts-tabs">
+            <a href="@TabUrl(null)" class="rwms-orders-tab @(isAllTab ? "is-active" : "")">
+                <i class="ti ti-users"></i>
+                <span>All</span>
+                <span class="rwms-orders-tab-count is-all">@Model.TotalCount</span>
+            </a>
+            <a href="@TabUrl("Customer")" class="rwms-orders-tab @(IsActiveTab("Customer") ? "is-active" : "")">
+                <i class="ti ti-building-store"></i>
+                <span>Clients</span>
+                <span class="rwms-orders-tab-count is-pending">@Model.ClientCount</span>
+            </a>
+            <a href="@TabUrl("Manager")" class="rwms-orders-tab @(IsActiveTab("Manager") ? "is-active" : "")">
+                <i class="ti ti-briefcase"></i>
+                <span>Managers</span>
+                <span class="rwms-orders-tab-count is-accepted">@Model.ManagerCount</span>
+            </a>
+            <a href="@TabUrl("Owner")" class="rwms-orders-tab @(IsActiveTab("Owner") ? "is-active" : "")">
+                <i class="ti ti-crown"></i>
+                <span>Owners</span>
+                <span class="rwms-orders-tab-count is-ready">@Model.OwnerCount</span>
+            </a>
+        </nav>
+
+        <form method="get" class="rwms-accounts-toolbar-form">
+            <input type="hidden" name="role" value="@Model.Role" />
+            <label class="rwms-orders-search" aria-label="Search accounts">
+                <span class="rwms-orders-search-icon" aria-hidden="true">Q</span>
+                <input type="search" name="search" value="@Model.Search" placeholder="Search by name or email..." />
+            </label>
+            <div class="rwms-products-toolbar-actions">
+                <button type="submit" class="btn btn--secondary">Search</button>
+                <a asp-action="Index" class="btn btn--secondary">Clear</a>
+            </div>
+        </form>
+    </section>
+
+    @if (!Model.Users.Any())
+    {
+        <section class="empty-state card">
+            @if (!string.IsNullOrWhiteSpace(Model.Search))
+            {
+                <span>No accounts match your search.</span>
+            }
+            else
+            {
+                <span>No accounts found.</span>
+            }
+        </section>
+    }
+    else
+    {
+        <section class="card rwms-restaurant-products-list">
+            <div class="rwms-restaurant-products-head rwms-accounts-head">
+                <span>Name</span>
+                <span>Email</span>
+                <span>Role</span>
+                <span>Status</span>
+                <span>Joined</span>
+                <span></span>
+            </div>
+
+            @foreach (var user in paged)
+            {
+                <article class="rwms-restaurant-product-row rwms-accounts-row">
+                    <div class="rwms-restaurant-product-primary">
+                        <strong>@user.Name</strong>
+                    </div>
+                    <span>@user.Email</span>
+                    <span class="rwms-orders-status is-neutral">@user.Role</span>
+                    <span class="rwms-orders-status @(user.IsActive ? "is-ready" : "is-rejected")">
+                        @(user.IsActive ? "Active" : "Inactive")
+                    </span>
+                    <span>@user.CreatedAt.ToString("MMM d, yyyy")</span>
+                    <a asp-action="Details" asp-route-id="@user.Id" class="rwms-order-details-link">View</a>
+                </article>
+            }
+        </section>
+
+        @if (totalUsers > pageSize)
+        {
+            <section class="rwms-orders-pagination card">
+                @if (currentPage > 1)
+                {
+                    <a href="@PageUrl(currentPage - 1)" class="btn btn--secondary">Previous</a>
+                }
+                else
+                {
+                    <button type="button" class="btn btn--secondary" disabled>Previous</button>
+                }
+                <span>Page @currentPage of @totalPages</span>
+                @if (currentPage < totalPages)
+                {
+                    <a href="@PageUrl(currentPage + 1)" class="btn btn--secondary">Next</a>
+                }
+                else
+                {
+                    <button type="button" class="btn btn--secondary" disabled>Next</button>
+                }
+            </section>
+        }
+    }
+</div>

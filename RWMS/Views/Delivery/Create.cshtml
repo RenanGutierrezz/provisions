@@ -1,0 +1,109 @@
+@model RWMS.Models.ViewModels.Delivery.CreateDeliveryViewModel
+
+@{
+    ViewData["Title"] = "New Delivery";
+}
+
+<div class="page o-stack">
+    <section class="card rwms-product-form-hero">
+        <div>
+            <h2>New Delivery Run</h2>
+            <p class="rwms-products-copy">Create a delivery run and assign orders to it.</p>
+        </div>
+    </section>
+
+    <section class="card rwms-product-form-card">
+        <form asp-action="Create" method="post" class="rwms-product-form">
+            <div asp-validation-summary="ModelOnly" class="rwms-validation-summary"></div>
+
+            <div class="rwms-product-form-grid">
+                <label class="rwms-contact-field">
+                    <span>Delivery Date</span>
+                    <input asp-for="Date" type="date" class="rwms-contact-input" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </label>
+
+                <div class="rwms-contact-field">
+                    <span>Assigned Driver</span>
+                    <div class="rwms-driver-search-wrap">
+                        <input type="text" id="driverSearchInput" class="rwms-contact-input" placeholder="Type a name to search..." autocomplete="off" />
+                        <input type="hidden" asp-for="DriverId" id="driverIdInput" />
+                        <ul id="driverDropdown" class="rwms-driver-dropdown" hidden></ul>
+                    </div>
+                </div>
+            </div>
+
+            <label class="rwms-contact-field">
+                <span>Notes for Driver</span>
+                <textarea asp-for="Notes" class="rwms-contact-textarea" rows="3" placeholder="Any special instructions for this delivery run..."></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </label>
+
+            <div class="rwms-product-detail-actions">
+                <button type="submit" class="btn btn--primary">Create Delivery</button>
+                <a asp-action="Index" class="btn btn--secondary">Cancel</a>
+            </div>
+        </form>
+    </section>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script>
+        (function () {
+            const searchInput = document.getElementById('driverSearchInput');
+            const idInput = document.getElementById('driverIdInput');
+            const dropdown = document.getElementById('driverDropdown');
+            let debounceTimer;
+            let activeController;
+
+            searchInput.addEventListener('input', function () {
+                const q = this.value.trim();
+                idInput.value = '';
+
+                clearTimeout(debounceTimer);
+                if (activeController) activeController.abort();
+
+                if (!q) {
+                    dropdown.hidden = true;
+                    dropdown.innerHTML = '';
+                    return;
+                }
+
+                debounceTimer = setTimeout(async () => {
+                    activeController = new AbortController();
+                    try {
+                        const res = await fetch(`/Account/SearchUsers?q=${encodeURIComponent(q)}`, {
+                            signal: activeController.signal
+                        });
+                        const users = await res.json();
+                        dropdown.innerHTML = '';
+                        if (!users.length) {
+                            dropdown.hidden = true;
+                            return;
+                        }
+                        users.forEach(u => {
+                            const li = document.createElement('li');
+                            li.textContent = u.name;
+                            li.addEventListener('mousedown', () => {
+                                searchInput.value = u.name;
+                                idInput.value = u.id;
+                                dropdown.hidden = true;
+                            });
+                            dropdown.appendChild(li);
+                        });
+                        dropdown.hidden = false;
+                    } catch (e) {
+                        if (e.name !== 'AbortError') dropdown.hidden = true;
+                    }
+                }, 250);
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.hidden = true;
+                }
+            });
+        })();
+    </script>
+}
